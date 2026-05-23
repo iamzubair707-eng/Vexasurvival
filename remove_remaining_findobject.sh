@@ -1,3 +1,9 @@
+#!/bin/bash
+
+echo "🔍 Removing remaining FindObjectOfType calls..."
+
+# Fix CachedReferences.cs
+cat > Scripts/Core/CachedReferences.cs << 'EOF'
 using UnityEngine;
 
 public class CachedReferences : MonoBehaviour

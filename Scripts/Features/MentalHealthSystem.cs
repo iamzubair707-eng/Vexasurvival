@@ -1,139 +1,189 @@
 using UnityEngine;
-using System.Collections.Generic;
+using System;
 
 public class MentalHealthSystem : MonoBehaviour
 {
     public static MentalHealthSystem Instance;
     
-    public float mentalHealth = 100f; // 0-100
+    public float mentalHealth = 100f;
     public float maxMentalHealth = 100f;
-    public TraumaState currentTrauma = TraumaState.None;
+    public MentalState currentState = MentalState.Stable;
     
-    public enum TraumaState
+    public enum MentalState
     {
-        None,
-        Depression,    // -50% resource production
-        PTSD,          // Random panic attacks
-        Aggression,    // +30% raid damage but -50% defense
-        Paranoia       // Sees fake attacks
+        Stable,      // Normal - 100% efficiency
+        Stressed,    // -20% production, slower movement
+        Depressed,   // -50% production, no raids
+        Rebellious,  // May refuse to work or attack
+        Insane       // Random actions, may leave base
     }
     
-    public List<TraumaEvent> traumaEvents = new List<TraumaEvent>();
-    
-    [System.Serializable]
-    public class TraumaEvent
-    {
-        public string eventName;
-        public float mentalHealthImpact;
-        public TraumaState triggersTrauma;
-        public string description;
-    }
+    public event Action<MentalState> OnMentalStateChanged;
     
     void Awake()
     {
         if (Instance == null)
+        {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     
     void Start()
     {
-        InitializeTraumaEvents();
-        InvokeRepeating("DecayMentalHealth", 3600f, 3600f); // Every hour
+        LoadMentalHealth();
+        InvokeRepeating("DecayMentalHealth", 60f, 60f); // Every minute
     }
     
-    void InitializeTraumaEvents()
+    public void AddTrauma(string eventName, int amount)
     {
-        traumaEvents.Add(new TraumaEvent { eventName = "Lost Raid", mentalHealthImpact = -15f, triggersTrauma = TraumaState.Depression, description = "Your survivors feel defeated." });
-        traumaEvents.Add(new TraumaEvent { eventName = "Base Attacked", mentalHealthImpact = -20f, triggersTrauma = TraumaState.PTSD, description = "Survivors traumatized by the attack." });
-        traumaEvents.Add(new TraumaEvent { eventName = "Ally Betrayed", mentalHealthImpact = -30f, triggersTrauma = TraumaState.Paranoia, description = "Trust is broken." });
-        traumaEvents.Add(new TraumaEvent { eventName = "Killed Enemy", mentalHealthImpact = -10f, triggersTrauma = TraumaState.Aggression, description = "Violence takes a toll." });
-        traumaEvents.Add(new TraumaEvent { eventName = "Found Supplies", mentalHealthImpact = +10f, triggersTrauma = TraumaState.None, description = "Hope restored!" });
-        traumaEvents.Add(new TraumaEvent { eventName = "Won Raid", mentalHealthImpact = +5f, triggersTrauma = TraumaState.None, description = "Confidence boost." });
-    }
-    
-    public void TriggerEvent(string eventName)
-    {
-        TraumaEvent evt = traumaEvents.Find(e => e.eventName == eventName);
-        if (evt != null)
-        {
-            mentalHealth += evt.mentalHealthImpact;
-            mentalHealth = Mathf.Clamp(mentalHealth, 0, maxMentalHealth);
-            
-            DebugLogger.Log($"🧠 {evt.description} Mental Health: {mentalHealth:F0}/100");
-            
-            // Check for trauma state
-            if (mentalHealth < 30 && currentTrauma == TraumaState.None)
-            {
-                currentTrauma = evt.triggersTrauma;
-                ApplyTraumaEffects();
-                SendNotification($"⚠️ TRAUMA: {currentTrauma}!", evt.description);
-            }
-            else if (mentalHealth > 70 && currentTrauma != TraumaState.None)
-            {
-                HealTrauma();
-            }
-            
-            SaveMentalState();
-        }
-    }
-    
-    void ApplyTraumaEffects()
-    {
-        ResourceManager resources = GetComponent<ResourceManager>();
+        mentalHealth -= amount;
+        mentalHealth = Mathf.Clamp(mentalHealth, 0, maxMentalHealth);
         
-        switch (currentTrauma)
+        UpdateMentalState();
+        SaveMentalHealth();
+        
+        string effect = GetCurrentEffect();
+        MasterGameManager.Instance?.UIManager?.ShowNotification($"🧠 {eventName}! Mental: {mentalHealth:F0}%", Color.red);
+        DebugLogger.Log($"🧠 Trauma: {eventName} -{amount} (Now: {mentalHealth:F0}) - {effect}");
+    }
+    
+    public void HealMentalHealth(int amount)
+    {
+        mentalHealth += amount;
+        mentalHealth = Mathf.Clamp(mentalHealth, 0, maxMentalHealth);
+        UpdateMentalState();
+        SaveMentalHealth();
+        
+        MasterGameManager.Instance?.UIManager?.ShowNotification($"💚 Mental health +{amount}%!", Color.green);
+    }
+    
+    void UpdateMentalState()
+    {
+        MentalState newState;
+        
+        if (mentalHealth >= 70)
+            newState = MentalState.Stable;
+        else if (mentalHealth >= 40)
+            newState = MentalState.Stressed;
+        else if (mentalHealth >= 20)
+            newState = MentalState.Depressed;
+        else if (mentalHealth >= 5)
+            newState = MentalState.Rebellious;
+        else
+            newState = MentalState.Insane;
+        
+        if (newState != currentState)
         {
-            case TraumaState.Depression:
-                DebugLogger.Log("😔 Depression: Resource production reduced by 50%");
+            currentState = newState;
+            OnMentalStateChanged?.Invoke(currentState);
+            ApplyStateEffects();
+            
+            MasterGameManager.Instance?.UIManager?.ShowNotification($"⚠️ Survivors are {currentState}!", Color.yellow);
+        }
+    }
+    
+    void ApplyStateEffects()
+    {
+        switch (currentState)
+        {
+            case MentalState.Stressed:
+                DebugLogger.Log("😟 Stressed: -20% production, slower movement");
                 break;
-            case TraumaState.PTSD:
-                DebugLogger.Log("😨 PTSD: Survivors panic randomly!");
+            case MentalState.Depressed:
+                DebugLogger.Log("😔 Depressed: -50% production, cannot raid");
                 break;
-            case TraumaState.Aggression:
-                DebugLogger.Log("😤 Aggression: +30% raid damage, -50% defense!");
+            case MentalState.Rebellious:
+                DebugLogger.Log("⚠️ Rebellious: May refuse to work!");
+                TriggerRebellion();
                 break;
-            case TraumaState.Paranoia:
-                DebugLogger.Log("👀 Paranoia: Seeing fake attacks!");
+            case MentalState.Insane:
+                DebugLogger.Log("💀 Insane: Random actions!");
+                TriggerInsanity();
                 break;
         }
     }
     
-    void HealTrauma()
+    void TriggerRebellion()
     {
-        currentTrauma = TraumaState.None;
-        DebugLogger.Log("💚 Trauma healed! Mental health restored.");
-        SendNotification("💚 Healing Complete!", "Survivors are recovering.");
+        if (UnityEngine.Random.Range(0, 100) < 30)
+        {
+            int stolen = UnityEngine.Random.Range(10, 50);
+            MasterGameManager.Instance?.Resources?.SpendResource("scrap", stolen);
+            MasterGameManager.Instance?.UIManager?.ShowNotification($"💔 Survivors stole {stolen} resources!", Color.red);
+        }
     }
     
-    public void TherapyMiniGame(int cost)
+    void TriggerInsanity()
     {
-        CurrencyManager currency = GetComponent<CurrencyManager>();
-        if (currency.SpendCoins(cost))
+        int randomAction = UnityEngine.Random.Range(0, 100);
+        if (randomAction < 20)
         {
-            mentalHealth += 20f;
-            mentalHealth = Mathf.Min(mentalHealth, maxMentalHealth);
-            DebugLogger.Log($"🎮 Therapy session complete! Mental health improved.");
+            // Random resource loss
+            MasterGameManager.Instance?.Resources?.SpendResource("scrap", 20);
+            MasterGameManager.Instance?.UIManager?.ShowNotification("🤪 Survivors went crazy! Lost 20 scrap!", Color.red);
         }
     }
     
     void DecayMentalHealth()
     {
-        if (currentTrauma != TraumaState.None)
+        if (currentState != MentalState.Stable)
         {
-            mentalHealth -= 5f;
-            DebugLogger.Log($"⚠️ Mental health decaying: {mentalHealth:F0}/100");
+            mentalHealth -= 2f;
+            mentalHealth = Mathf.Clamp(mentalHealth, 0, maxMentalHealth);
+            UpdateMentalState();
+            SaveMentalHealth();
         }
     }
     
-    void SendNotification(string title, string message)
+    public string GetCurrentEffect()
     {
-        NotificationManager notif = GetComponent<NotificationManager>();
-        if (notif != null) notif.ShowNotification($"{title}: {message}", "warning");
+        switch (currentState)
+        {
+            case MentalState.Stressed: return "-20% production";
+            case MentalState.Depressed: return "-50% production, no raids";
+            case MentalState.Rebellious: return "May steal resources";
+            case MentalState.Insane: return "Random actions";
+            default: return "Normal operations";
+        }
     }
     
-    void SaveMentalState()
+    public void SendToCounseling()
+    {
+        if (MasterGameManager.Instance?.Resources?.SpendResource("scrap", 50) == true)
+        {
+            HealMentalHealth(30);
+            DebugLogger.Log("💚 Counseling helped!");
+        }
+        else
+        {
+            MasterGameManager.Instance?.UIManager?.ShowNotification("❌ Need 50 scrap for counseling!", Color.red);
+        }
+    }
+    
+    void SaveMentalHealth()
     {
         PlayerPrefs.SetFloat("MentalHealth", mentalHealth);
-        PlayerPrefs.SetInt("CurrentTrauma", (int)currentTrauma);
+        PlayerPrefs.SetInt("MentalState", (int)currentState);
+    }
+    
+    void LoadMentalHealth()
+    {
+        mentalHealth = PlayerPrefs.GetFloat("MentalHealth", 100f);
+        currentState = (MentalState)PlayerPrefs.GetInt("MentalState", 0);
+    }
+    
+    void OnGUI()
+    {
+        if (MasterGameManager.Instance == null) return;
+        
+        GUI.Box(new Rect(10, Screen.height - 80, 200, 60), "🧠 MENTAL STATUS");
+        GUI.Label(new Rect(20, Screen.height - 60, 180, 20), $"Health: {mentalHealth:F0}%");
+        GUI.Label(new Rect(20, Screen.height - 40, 180, 20), $"State: {currentState}");
+        GUI.Label(new Rect(20, Screen.height - 20, 180, 20), $"Effect: {GetCurrentEffect()}");
     }
 }
