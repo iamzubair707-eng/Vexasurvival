@@ -40,7 +40,7 @@ public class OptimizedUIManager : MonoBehaviour
     void CacheUIReferences()
     {
         // Cache all UI text components at startup
-        GameObject canvas = GameObject.Find("Canvas");
+        GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
         if (canvas != null)
         {
             woodText = FindTextInChildren(canvas.transform, "WoodText");
