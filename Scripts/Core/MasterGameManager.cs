@@ -10,7 +10,7 @@ public class MasterGameManager : MonoBehaviour
         {
             if (_instance == null)
             {
-                _instance = FindObjectOfType<MasterGameManager>();
+                _instance = MasterGameManager.Instance;
                 if (_instance == null)
                 {
                     GameObject go = new GameObject("MasterGameManager");
