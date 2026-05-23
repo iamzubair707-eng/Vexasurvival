@@ -21,9 +21,9 @@ public class CachedReferences : MonoBehaviour
             
             // Assign all references via Inspector or find once
             GameManager = MasterGameManager.Instance;
-            Resources = FindObjectOfType<CoreResources>();
-            Currency = FindObjectOfType<CurrencyManager>();
-            UI = FindObjectOfType<UIManager>();
+            Resources = MasterGameManager.Instance.Resources;
+            Currency = MasterGameManager.Instance.Currency;
+            UI = MasterGameManager.Instance.UIManager;
         }
         else
         {
