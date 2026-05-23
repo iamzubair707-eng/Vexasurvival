@@ -1,50 +1,32 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
-    public Joystick joystick; // Assign in Unity (Free asset)
     
-    private Rigidbody2D rb;
-    private Animator animator;
-    private Vector2 movement;
+    private Rigidbody2D _cachedRigidbody;
+    private Animator _cachedAnimator;
     
-    void Start()
+    void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-        
-        if (joystick == null)
-            DebugLogger.LogWarning("Joystick not assigned! Using keyboard controls.");
+        _cachedRigidbody = GetComponent<Rigidbody2D>();
+        _cachedAnimator = GetComponent<Animator>();
     }
     
     void Update()
     {
-        // Mobile joystick input
-        if (joystick != null)
+        float moveX = Input.GetAxisRaw("Horizontal");
+        float moveY = Input.GetAxisRaw("Vertical");
+        
+        if (_cachedAnimator != null)
         {
-            movement.x = joystick.Horizontal;
-            movement.y = joystick.Vertical;
-        }
-        else
-        {
-            // Keyboard fallback (for testing in editor)
-            movement.x = Input.GetAxisRaw("Horizontal");
-            movement.y = Input.GetAxisRaw("Vertical");
+            _cachedAnimator.SetFloat("Horizontal", moveX);
+            _cachedAnimator.SetFloat("Vertical", moveY);
         }
         
-        // Animate
-        if (animator != null)
+        if (_cachedRigidbody != null)
         {
-            animator.SetFloat("Horizontal", movement.x);
-            animator.SetFloat("Vertical", movement.y);
-            animator.SetFloat("Speed", movement.sqrMagnitude);
+            _cachedRigidbody.velocity = new Vector2(moveX, moveY) * moveSpeed;
         }
-    }
-    
-    void FixedUpdate()
-    {
-        rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
     }
 }

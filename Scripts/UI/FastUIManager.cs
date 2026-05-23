@@ -32,7 +32,7 @@ public class FastUIManager : MonoBehaviour
     void CacheUIElements()
     {
         // Find and cache once - never again
-        GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
+        GameObject canvas = GameObject.GameObject.FindGameObjectWithTag("Canvas");
         if (canvas == null) return;
         
         cachedWoodText = FindText(canvas.transform, "WoodText");
