@@ -119,7 +119,7 @@ public class GameBalancer : MonoBehaviour
     
     float GetMentalHealthPenalty()
     {
-        var mental = MasterGameManager.Instance?.GetComponent<MentalHealthSystem>();
+        var mental = MentalHealthSystem.Instance;
         if (mental == null) return 1f;
         
         switch (mental.currentState)
