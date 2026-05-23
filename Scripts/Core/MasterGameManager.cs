@@ -1,22 +1,48 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class MasterGameManager : MonoBehaviour
 {
-    public static MasterGameManager Instance { get; private set; }
+    private static MasterGameManager _instance;
+    public static MasterGameManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<MasterGameManager>();
+                if (_instance == null)
+                {
+                    GameObject go = new GameObject("MasterGameManager");
+                    _instance = go.AddComponent<MasterGameManager>();
+                    DontDestroyOnLoad(go);
+                }
+            }
+            return _instance;
+        }
+    }
     
-    [Header("Core Systems")]
-    public CoreResources resources;
-    public CurrencyManager currency;
-    public BuildingSystem buildingSystem;
-    public CombatSystem combatSystem;
-    public PVERaidSystem pveRaid;
-    public ChestSystem chestSystem;
-    public QuestManager questManager;
-    public TutorialSystem tutorialSystem;
-    
-    [Header("UI")]
-    public UIManager uiManager;
+    [Header("Cached Systems - Set once at startup")]
+    public CoreResources Resources;
+    public CurrencyManager Currency;
+    public BuildingSystem BuildingSystem;
+    public CombatSystem CombatSystem;
+    public PVERaidSystem PVERaid;
+    public ChestSystem ChestSystem;
+    public QuestManager QuestManager;
+    public TutorialSystem TutorialSystem;
+    public UIManager UIManager;
+    public EnergySystem EnergySystem;
+    public AudioManager Audio;
+    public VisualManager Visual;
+    public ClanSystem Clan;
+    public Leaderboard Leaderboard;
+    public NotificationManager Notification;
+    public VehicleManager Vehicle;
+    public DefenseSystem Defense;
+    public OfflineRewards OfflineRewards;
+    public GameBalancer Balancer;
+    public AntiCheat AntiCheat;
     
     [Header("Game State")]
     public int playerLevel = 1;
@@ -29,58 +55,86 @@ public class MasterGameManager : MonoBehaviour
     
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            InitializeAllSystems();
-        }
-        else
+        if (_instance != null && _instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+        
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
+        CacheAllSystems();
     }
     
-    void InitializeAllSystems()
+    void CacheAllSystems()
     {
-        DebugLogger.Log("🚀 Initializing VEXA SURVIVAL - Master Game Manager");
+        DebugLogger.Log("🚀 Caching all systems...");
         
-        // Find or create systems
-        if (resources == null) resources = FindObjectOfType<CoreResources>();
-        if (currency == null) currency = FindObjectOfType<CurrencyManager>();
-        if (buildingSystem == null) buildingSystem = FindObjectOfType<BuildingSystem>();
-        if (combatSystem == null) combatSystem = FindObjectOfType<CombatSystem>();
-        if (pveRaid == null) pveRaid = FindObjectOfType<PVERaidSystem>();
-        if (chestSystem == null) chestSystem = FindObjectOfType<ChestSystem>();
-        if (questManager == null) questManager = FindObjectOfType<QuestManager>();
-        if (tutorialSystem == null) tutorialSystem = FindObjectOfType<TutorialSystem>();
-        if (uiManager == null) uiManager = FindObjectOfType<UIManager>();
+        Resources = FindObjectOfType<CoreResources>();
+        Currency = FindObjectOfType<CurrencyManager>();
+        BuildingSystem = FindObjectOfType<BuildingSystem>();
+        CombatSystem = FindObjectOfType<CombatSystem>();
+        PVERaid = FindObjectOfType<PVERaidSystem>();
+        ChestSystem = FindObjectOfType<ChestSystem>();
+        QuestManager = FindObjectOfType<QuestManager>();
+        TutorialSystem = FindObjectOfType<TutorialSystem>();
+        UIManager = FindObjectOfType<UIManager>();
+        EnergySystem = FindObjectOfType<EnergySystem>();
+        Audio = FindObjectOfType<AudioManager>();
+        Visual = FindObjectOfType<VisualManager>();
+        Clan = FindObjectOfType<ClanSystem>();
+        Leaderboard = FindObjectOfType<Leaderboard>();
+        Notification = FindObjectOfType<NotificationManager>();
+        Vehicle = FindObjectOfType<VehicleManager>();
+        Defense = FindObjectOfType<DefenseSystem>();
+        OfflineRewards = FindObjectOfType<OfflineRewards>();
+        Balancer = FindObjectOfType<GameBalancer>();
+        AntiCheat = FindObjectOfType<AntiCheat>();
+        
+        // Create missing systems if needed
+        if (Resources == null) Resources = gameObject.AddComponent<CoreResources>();
+        if (Currency == null) Currency = gameObject.AddComponent<CurrencyManager>();
+        if (BuildingSystem == null) BuildingSystem = gameObject.AddComponent<BuildingSystem>();
         
         LoadGameData();
         isGameReady = true;
         
-        StartCoroutine(DelayedStart());
-        DebugLogger.Log("✅ All systems initialized! Total Systems: " + CountActiveSystems());
+        DebugLogger.Log($"✅ All systems cached! Total: {CountActiveSystems()}");
     }
     
-    IEnumerator DelayedStart()
+    int CountActiveSystems()
+    {
+        int count = 0;
+        if (Resources != null) count++;
+        if (Currency != null) count++;
+        if (BuildingSystem != null) count++;
+        if (CombatSystem != null) count++;
+        if (PVERaid != null) count++;
+        if (ChestSystem != null) count++;
+        if (QuestManager != null) count++;
+        if (UIManager != null) count++;
+        return count;
+    }
+    
+    void Start()
+    {
+        StartCoroutine(DelayedStart());
+    }
+    
+    System.Collections.IEnumerator DelayedStart()
     {
         yield return new WaitForSeconds(0.5f);
         
-        // Start tutorial if not completed
-        if (PlayerPrefs.GetInt("TutorialComplete", 0) == 0 && tutorialSystem != null)
+        if (TutorialSystem != null && PlayerPrefs.GetInt("TutorialComplete", 0) == 0)
         {
-            tutorialSystem.StartTutorial();
+            TutorialSystem.StartTutorial();
         }
         
-        // Check daily streak
         CheckDailyLogin();
-        
-        // Check offline rewards
-        CheckOfflineRewards();
+        if (OfflineRewards != null) OfflineRewards.CheckOfflineRewards();
         
         UpdateAllUI();
-        DebugLogger.Log("🎮 Game Ready! Start playing!");
+        DebugLogger.Log("🎮 Game Ready!");
     }
     
     // ==================== CORE LOOP METHODS ====================
@@ -89,25 +143,18 @@ public class MasterGameManager : MonoBehaviour
     {
         if (!isGameReady) return;
         
-        switch (type.ToLower())
+        if (Resources != null)
         {
-            case "wood":
-                resources?.AddResource("scrap", amount);
-                break;
-            case "stone":
-                resources?.AddResource("fuel", amount);
-                break;
-            case "food":
-                resources?.AddResource("food", amount);
-                break;
+            switch (type.ToLower())
+            {
+                case "wood": Resources.AddResource("scrap", amount); break;
+                case "stone": Resources.AddResource("fuel", amount); break;
+                case "food": Resources.AddResource("food", amount); break;
+            }
         }
         
-        // Add to quest progress
-        questManager?.UpdateProgress(type, amount);
-        
-        // Check tutorial
-        tutorialSystem?.CheckAction("gather");
-        
+        QuestManager?.UpdateProgress(type, amount);
+        TutorialSystem?.CheckAction("gather");
         UpdateResourceUI();
         DebugLogger.Log($"📦 Gathered {amount} {type}!");
     }
@@ -118,23 +165,17 @@ public class MasterGameManager : MonoBehaviour
         
         int cost = 50 * buildingLevel;
         
-        if (currency != null && currency.SpendCoins(cost))
+        if (Currency != null && Currency.SpendCoins(cost))
         {
             buildingLevel++;
-            buildingSystem?.UpgradeBuilding(cost);
-            
-            // Visual feedback
-            uiManager?.ShowNotification($"🏗️ Building upgraded to level {buildingLevel}!", Color.green);
-            
-            // Check tutorial
-            tutorialSystem?.CheckAction("upgrade");
-            
+            BuildingSystem?.UpgradeBuilding(cost);
+            UIManager?.ShowNotification($"🏗️ Building upgraded to level {buildingLevel}!", Color.green);
+            TutorialSystem?.CheckAction("upgrade");
             UpdateBuildingUI();
-            DebugLogger.Log($"Building upgraded to level {buildingLevel}!");
         }
         else
         {
-            uiManager?.ShowNotification($"❌ Not enough coins! Need {cost} coins!", Color.red);
+            UIManager?.ShowNotification($"❌ Need {cost} coins!", Color.red);
         }
     }
     
@@ -144,21 +185,16 @@ public class MasterGameManager : MonoBehaviour
         
         int cost = 30;
         
-        if (currency != null && currency.SpendCoins(cost))
+        if (Currency != null && Currency.SpendCoins(cost))
         {
             troopCount++;
-            
-            uiManager?.ShowNotification($"⚔️ Troop trained! Total: {troopCount}", Color.cyan);
-            
-            // Check tutorial
-            tutorialSystem?.CheckAction("train");
-            
+            UIManager?.ShowNotification($"⚔️ Troop trained! Total: {troopCount}", Color.cyan);
+            TutorialSystem?.CheckAction("train");
             UpdateTroopUI();
-            DebugLogger.Log($"Troop trained! Now have {troopCount} troops.");
         }
         else
         {
-            uiManager?.ShowNotification($"❌ Not enough coins! Need {cost} coins!", Color.red);
+            UIManager?.ShowNotification($"❌ Need {cost} coins!", Color.red);
         }
     }
     
@@ -168,105 +204,56 @@ public class MasterGameManager : MonoBehaviour
         
         if (troopCount <= 0)
         {
-            uiManager?.ShowNotification("❌ No troops! Train some soldiers first!", Color.red);
+            UIManager?.ShowNotification("❌ No troops! Train first!", Color.red);
             return;
         }
         
-        if (pveRaid == null)
-        {
-            DebugLogger.LogError("PVERaidSystem not found!");
-            return;
-        }
-        
-        // Calculate raid power
-        int playerPower = combatSystem?.CalculateRaidPower(troopCount, buildingLevel) ?? 50;
+        int playerPower = CombatSystem?.CalculateRaidPower(troopCount, buildingLevel) ?? 50;
         int enemyPower = Random.Range(30, 80);
         
-        uiManager?.ShowNotification($"⚔️ RAID STARTED! Power: {playerPower} vs {enemyPower}", Color.yellow);
-        
-        // Execute raid
-        var result = combatSystem?.ExecuteRaid(playerPower, enemyPower);
+        var result = CombatSystem?.ExecuteRaid(playerPower, enemyPower);
         
         if (result != null && result.isVictory)
         {
-            // Victory
             raidsCompleted++;
-            int loot = result.lootAmount;
-            int expGain = result.expGain;
-            
-            resources?.AddResource("scrap", loot);
-            AddXP(expGain);
-            
-            uiManager?.ShowNotification($"🏆 RAID VICTORY! +{loot} scrap, +{expGain} XP!", Color.green);
-            
-            // Add to quest progress
-            questManager?.UpdateProgress("raid", 1);
-            
-            // Give free chest chance
-            if (Random.Range(0, 100) < 20)
-            {
-                chestSystem?.AddFreeChest();
-                uiManager?.ShowNotification($"🎁 Bonus chest earned!", Color.yellow);
-            }
-            
-            // Check tutorial
-            tutorialSystem?.CheckAction("raid");
+            Resources?.AddResource("scrap", result.lootAmount);
+            AddXP(result.expGain);
+            UIManager?.ShowNotification($"🏆 RAID VICTORY! +{result.lootAmount} scrap!", Color.green);
+            QuestManager?.UpdateProgress("raid", 1);
+            TutorialSystem?.CheckAction("raid");
         }
         else
         {
-            // Defeat
-            int damage = result?.damageTaken ?? 30;
             troopCount = Mathf.Max(0, troopCount - 1);
-            
-            uiManager?.ShowNotification($"💀 RAID DEFEATED! Lost {damage} scrap and 1 troop!", Color.red);
+            UIManager?.ShowNotification($"💀 RAID DEFEATED! Lost 1 troop!", Color.red);
         }
         
         UpdateAllUI();
-        DebugLogger.Log($"Raid completed! Victory: {result?.isVictory ?? false}");
     }
     
     public void OpenChest()
     {
-        if (!isGameReady) return;
+        if (ChestSystem == null) return;
         
-        if (chestSystem == null)
-        {
-            DebugLogger.LogError("ChestSystem not found!");
-            return;
-        }
-        
-        var reward = chestSystem.OpenChest();
+        var reward = ChestSystem.OpenChest();
         
         if (reward != null)
         {
             switch (reward.rewardType)
             {
-                case "coins":
-                    currency?.AddCoins(reward.amount);
-                    break;
-                case "gems":
-                    currency?.AddGems(reward.amount);
-                    break;
-                case "scrap":
-                    resources?.AddResource("scrap", reward.amount);
-                    break;
+                case "coins": Currency?.AddCoins(reward.amount); break;
+                case "gems": Currency?.AddGems(reward.amount); break;
+                case "scrap": Resources?.AddResource("scrap", reward.amount); break;
             }
-            
-            uiManager?.ShowNotification($"🎁 CHEST OPENED! +{reward.amount} {reward.rewardType}!", Color.magenta);
-            
-            // Check tutorial
-            tutorialSystem?.CheckAction("chest");
-            
+            UIManager?.ShowNotification($"🎁 +{reward.amount} {reward.rewardType}!", Color.magenta);
+            TutorialSystem?.CheckAction("chest");
             UpdateAllUI();
-            DebugLogger.Log($"Chest opened! Got {reward.amount} {reward.rewardType}!");
         }
         else
         {
-            uiManager?.ShowNotification("⏰ No chests available! Come back in 3 hours!", Color.gray);
+            UIManager?.ShowNotification("⏰ No chests! Come back in 3 hours!", Color.gray);
         }
     }
-    
-    // ==================== XP & LEVEL SYSTEM ====================
     
     void AddXP(int amount)
     {
@@ -277,22 +264,13 @@ public class MasterGameManager : MonoBehaviour
         {
             currentXP -= xpNeeded;
             playerLevel++;
-            uiManager?.ShowNotification($"🎉 LEVEL UP! Now Level {playerLevel}!", Color.yellow);
-            OnLevelUp();
+            UIManager?.ShowNotification($"🎉 LEVEL {playerLevel}!", Color.yellow);
+            Currency?.AddGems(50);
+            Currency?.AddCoins(200);
+            EnergySystem?.RefillEnergy();
         }
         
         UpdateLevelUI();
-    }
-    
-    void OnLevelUp()
-    {
-        // Give level up rewards
-        currency?.AddGems(50);
-        currency?.AddCoins(200);
-        
-        // Full energy restore
-        EnergySystem energy = FindObjectOfType<EnergySystem>();
-        energy?.RefillEnergy();
     }
     
     // ==================== DAILY & OFFLINE ====================
@@ -304,34 +282,14 @@ public class MasterGameManager : MonoBehaviour
         
         if (lastDate != today)
         {
-            int streak = PlayerPrefs.GetInt("LoginStreak", 0);
-            streak++;
+            int streak = PlayerPrefs.GetInt("LoginStreak", 0) + 1;
             PlayerPrefs.SetInt("LoginStreak", streak);
             PlayerPrefs.SetString("LastLoginDate", today);
             
             int bonus = 50 + (streak * 10);
-            currency?.AddCoins(bonus);
-            uiManager?.ShowNotification($"🔥 Daily Login! +{bonus} coins! Streak: {streak}", Color.yellow);
+            Currency?.AddCoins(bonus);
+            UIManager?.ShowNotification($"🔥 Daily +{bonus} coins! Streak: {streak}", Color.yellow);
         }
-    }
-    
-    void CheckOfflineRewards()
-    {
-        string lastTimeStr = PlayerPrefs.GetString("LastOfflineTime", "");
-        if (!string.IsNullOrEmpty(lastTimeStr))
-        {
-            System.DateTime lastTime = System.DateTime.Parse(lastTimeStr);
-            System.TimeSpan diff = System.DateTime.Now - lastTime;
-            int hoursOffline = Mathf.Min((int)diff.TotalHours, 12);
-            
-            if (hoursOffline > 0)
-            {
-                int offlineReward = hoursOffline * 20;
-                resources?.AddResource("scrap", offlineReward);
-                uiManager?.ShowNotification($"🎁 Welcome back! +{offlineReward} scrap from offline!", Color.green);
-            }
-        }
-        PlayerPrefs.SetString("LastOfflineTime", System.DateTime.Now.ToString());
     }
     
     // ==================== UI UPDATES ====================
@@ -346,39 +304,28 @@ public class MasterGameManager : MonoBehaviour
     
     void UpdateResourceUI()
     {
-        if (uiManager != null && resources != null && currency != null)
+        if (UIManager != null && Resources != null && Currency != null)
         {
-            uiManager.UpdateResources(
-                resources.scrap,  // wood
-                resources.fuel,   // stone
-                currency.coins,
-                currency.gems
-            );
+            UIManager.UpdateResources(Resources.scrap, Resources.fuel, Currency.coins, Currency.gems);
         }
     }
     
     void UpdateBuildingUI()
     {
-        if (uiManager != null)
+        if (UIManager != null)
         {
-            uiManager.UpdateStatus(playerLevel, troopCount, pveRaid?.raidEnergy ?? 3);
+            UIManager.UpdateStatus(playerLevel, troopCount, PVERaid?.raidEnergy ?? 3);
         }
     }
     
     void UpdateTroopUI()
     {
-        if (uiManager != null)
-        {
-            uiManager.UpdateTroopCount(troopCount);
-        }
+        if (UIManager != null) UIManager.UpdateTroopCount(troopCount);
     }
     
     void UpdateLevelUI()
     {
-        if (uiManager != null)
-        {
-            uiManager.UpdateLevel(playerLevel, currentXP, playerLevel * 100);
-        }
+        if (UIManager != null) UIManager.UpdateLevel(playerLevel, currentXP, playerLevel * 100);
     }
     
     // ==================== SAVE & LOAD ====================
@@ -402,35 +349,8 @@ public class MasterGameManager : MonoBehaviour
         PlayerPrefs.Save();
     }
     
-    void OnApplicationQuit()
-    {
-        SaveGameData();
-        PlayerPrefs.SetString("LastOfflineTime", System.DateTime.Now.ToString());
-    }
-    
-    void OnApplicationPause(bool pauseStatus)
-    {
-        if (pauseStatus)
-        {
-            SaveGameData();
-            PlayerPrefs.SetString("LastOfflineTime", System.DateTime.Now.ToString());
-        }
-    }
-    
-    int CountActiveSystems()
-    {
-        int count = 0;
-        if (resources != null) count++;
-        if (currency != null) count++;
-        if (buildingSystem != null) count++;
-        if (combatSystem != null) count++;
-        if (pveRaid != null) count++;
-        if (chestSystem != null) count++;
-        if (questManager != null) count++;
-        if (tutorialSystem != null) count++;
-        if (uiManager != null) count++;
-        return count;
-    }
+    void OnApplicationQuit() => SaveGameData();
+    void OnApplicationPause(bool pause) { if (pause) SaveGameData(); }
     
     // ==================== PUBLIC GETTERS ====================
     
@@ -438,4 +358,23 @@ public class MasterGameManager : MonoBehaviour
     public int GetBuildingLevel() => buildingLevel;
     public int GetPlayerLevel() => playerLevel;
     public bool IsGameReady() => isGameReady;
+    
+    // Generic getter for any system
+    public T GetSystem<T>() where T : Component
+    {
+        var typeName = typeof(T).Name;
+        return typeName switch
+        {
+            nameof(CoreResources) => Resources as T,
+            nameof(CurrencyManager) => Currency as T,
+            nameof(BuildingSystem) => BuildingSystem as T,
+            nameof(CombatSystem) => CombatSystem as T,
+            nameof(PVERaidSystem) => PVERaid as T,
+            nameof(ChestSystem) => ChestSystem as T,
+            nameof(UIManager) => UIManager as T,
+            nameof(AudioManager) => Audio as T,
+            nameof(VisualManager) => Visual as T,
+            _ => FindObjectOfType<T>()
+        };
+    }
 }
