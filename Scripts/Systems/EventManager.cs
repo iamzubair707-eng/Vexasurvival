@@ -74,7 +74,7 @@ public class EventManager : MonoBehaviour
         if (notificationManager != null)
             notificationManager.ShowNotification(msg, "urgent");
         
-        DebugLogger.Log("🎉 DOUBLE REWARDS EVENT STARTED! (30 minutes)");
+        DebugLogger.Log(" DOUBLE REWARDS EVENT STARTED! (30 minutes)");
         
         PlayerPrefs.SetInt("DoubleReward", 1);
         PlayerPrefs.SetFloat("EventEndTime", eventEndTime);

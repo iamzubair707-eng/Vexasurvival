@@ -94,17 +94,17 @@ public class GameTester : MonoBehaviour
         resourceManager.AddResource("food", 75);
         resourceManager.AddResource("vexa", 25);
         
-        DebugLogger.Log("✅ Added: 100 Wood, 50 Stone, 75 Food, 25 VEXA");
+        DebugLogger.Log(" Added: 100 Wood, 50 Stone, 75 Food, 25 VEXA");
         
         // Spend some
         resourceManager.SpendResource("wood", 30);
         resourceManager.SpendResource("vexa", 5);
         
-        DebugLogger.Log("✅ Spent: 30 Wood, 5 VEXA");
+        DebugLogger.Log(" Spent: 30 Wood, 5 VEXA");
         
         // Try to spend more than available
         bool result = resourceManager.SpendResource("vexa", 1000);
-        DebugLogger.Log($"Trying to spend 1000 VEXA (should fail): {(result ? "FAILED" : "✅ PASS")}");
+        DebugLogger.Log($"Trying to spend 1000 VEXA (should fail): {(result ? "FAILED" : " PASS")}");
     }
     
     void TestHealthSystem()
@@ -112,21 +112,21 @@ public class GameTester : MonoBehaviour
         DebugLogger.Log("=== TESTING HEALTH SYSTEM ===");
         
         healthSystem.TakeDamage(30);
-        DebugLogger.Log("✅ Took 30 damage");
+        DebugLogger.Log(" Took 30 damage");
         
         healthSystem.Heal(20);
-        DebugLogger.Log("✅ Healed 20 HP");
+        DebugLogger.Log(" Healed 20 HP");
         
         // Test death
         healthSystem.TakeDamage(200);
-        DebugLogger.Log("✅ Took 200 damage (should trigger death)");
+        DebugLogger.Log(" Took 200 damage (should trigger death)");
     }
     
     void TestRaidSystem()
     {
         DebugLogger.Log("=== TESTING RAID SYSTEM ===");
         raidSystem.StartRaid("test_player_123");
-        DebugLogger.Log("✅ Raid executed");
+        DebugLogger.Log(" Raid executed");
     }
     
     void TestQuestSystem()
@@ -135,7 +135,7 @@ public class GameTester : MonoBehaviour
         questManager.UpdateProgress("wood", 50);
         questManager.UpdateProgress("raid", 1);
         questManager.ShowQuests();
-        DebugLogger.Log("✅ Quest progress updated");
+        DebugLogger.Log(" Quest progress updated");
     }
     
     void TestShopSystem()
@@ -144,14 +144,14 @@ public class GameTester : MonoBehaviour
         shopManager.ShowShop();
         shopManager.BuyItem("heal_potion");
         shopManager.BuyItem("resource_pack");
-        DebugLogger.Log("✅ Shop tested");
+        DebugLogger.Log(" Shop tested");
     }
     
     void TestEventSystem()
     {
         DebugLogger.Log("=== TESTING EVENT SYSTEM ===");
         eventManager.StartDoubleRewardEvent();
-        DebugLogger.Log("✅ Double reward event started");
+        DebugLogger.Log(" Double reward event started");
         
         int bonus = eventManager.GetBonusReward(100);
         DebugLogger.Log($"Bonus reward test: 100 → {bonus}");
@@ -163,7 +163,7 @@ public class GameTester : MonoBehaviour
         battlePassManager.AddXP(50);
         battlePassManager.AddXP(80);
         battlePassManager.ShowBattlePassUI();
-        DebugLogger.Log("✅ Battle Pass tested");
+        DebugLogger.Log(" Battle Pass tested");
     }
     
     void TestClanSystem()
@@ -173,7 +173,7 @@ public class GameTester : MonoBehaviour
         clanSystem.JoinClan("TestClan", "Player2");
         clanSystem.AddClanVexa(100);
         clanSystem.ShowClanLeaderboard();
-        DebugLogger.Log("✅ Clan system tested");
+        DebugLogger.Log(" Clan system tested");
     }
     
     void ShowAllStatus()
@@ -181,9 +181,9 @@ public class GameTester : MonoBehaviour
         DebugLogger.Log("========== 📊 ALL SYSTEMS STATUS 📊 ==========");
         DebugLogger.Log($"💰 Resources: Wood={resourceManager?.wood}, Stone={resourceManager?.stone}, Food={resourceManager?.food}, VEXA={resourceManager?.vexaTokens}");
         DebugLogger.Log($"❤️ Health: {healthSystem?.maxHealth}");
-        DebugLogger.Log($"🏆 Battle Pass: Level {battlePassManager?.currentLevel}, XP={battlePassManager?.currentXP}");
-        DebugLogger.Log($"🎯 Active Event: {eventManager?.GetActiveEventMessage()}");
-        DebugLogger.Log($"🛡️ Shield Active: {shopManager?.IsShieldActive()}");
+        DebugLogger.Log($" Battle Pass: Level {battlePassManager?.currentLevel}, XP={battlePassManager?.currentXP}");
+        DebugLogger.Log($" Active Event: {eventManager?.GetActiveEventMessage()}");
+        DebugLogger.Log($" Shield Active: {shopManager?.IsShieldActive()}");
         questManager?.ShowQuests();
         shopManager?.ShowShop();
         DebugLogger.Log("===============================================");
@@ -191,9 +191,9 @@ public class GameTester : MonoBehaviour
     
     void ResetTestData()
     {
-        DebugLogger.Log("⚠️ Resetting all test data...");
+        DebugLogger.Log(" Resetting all test data...");
         PlayerPrefs.DeleteAll();
-        DebugLogger.Log("✅ All data reset! Restart the game to see effects.");
+        DebugLogger.Log(" All data reset! Restart the game to see effects.");
     }
     
     void OnGUI()

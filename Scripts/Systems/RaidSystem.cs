@@ -38,7 +38,7 @@ public class RaidSystem : MonoBehaviour
             resourceManager.AddResource("wood", lootAmount);
             resourceManager.AddResource("stone", lootAmount / 2);
             resourceManager.AddResource("vexa", lootAmount / 10);
-            DebugLogger.Log($"✅ Raid WON! Loot: {lootAmount} wood, {lootAmount/2} stone");
+            DebugLogger.Log($" Raid WON! Loot: {lootAmount} wood, {lootAmount/2} stone");
             
             // Add to leaderboard
             AddRaidWin();

@@ -102,7 +102,7 @@ public class VehicleSystem : MonoBehaviour
         }
         activeVehicle = availableVehicles.Find(v => v.isEquipped);
         SaveVehicleData();
-        DebugLogger.Log($"🔧 Equipped: {activeVehicle?.vehicleName}");
+        DebugLogger.Log($" Equipped: {activeVehicle?.vehicleName}");
     }
     
     public bool ConsumeFuel(int amount)

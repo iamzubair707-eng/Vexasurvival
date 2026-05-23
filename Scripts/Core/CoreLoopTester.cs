@@ -4,7 +4,7 @@ public class CoreLoopTester : MonoBehaviour
 {
     void OnGUI()
     {
-        GUI.Box(new Rect(Screen.width - 220, 10, 210, 180), "🎮 CORE LOOP TEST");
+        GUI.Box(new Rect(Screen.width - 220, 10, 210, 180), " CORE LOOP TEST");
         
         if (GUI.Button(new Rect(Screen.width - 210, 45, 190, 25), "1. Gather Resources"))
             MasterGameManager.Instance?.GatherResource("wood", 10);

@@ -72,10 +72,10 @@ public class BattlePassManager : MonoBehaviour
             // Show level up notification
             if (notificationManager != null)
             {
-                notificationManager.ShowNotification($"🎉 BATTLE PASS LEVEL {currentLevel} REACHED! 🎉", "success");
+                notificationManager.ShowNotification($" BATTLE PASS LEVEL {currentLevel} REACHED! ", "success");
             }
             
-            DebugLogger.Log($"🏆 Battle Pass Level Up! Now Level {currentLevel}");
+            DebugLogger.Log($" Battle Pass Level Up! Now Level {currentLevel}");
             
             xpToNextLevel = CalculateNextLevelXP();
         }
@@ -138,7 +138,7 @@ public class BattlePassManager : MonoBehaviour
             case "shield":
                 PlayerPrefs.SetInt("ShieldActive", 1);
                 PlayerPrefs.SetFloat("ShieldEndTime", Time.time + 86400);
-                DebugLogger.Log("🛡️ 24-HOUR SHIELD ACTIVATED!");
+                DebugLogger.Log(" 24-HOUR SHIELD ACTIVATED!");
                 break;
         }
     }
@@ -187,7 +187,7 @@ public class BattlePassManager : MonoBehaviour
         DebugLogger.Log("========== BATTLE PASS ==========");
         DebugLogger.Log($"Level: {currentLevel}/50");
         DebugLogger.Log($"XP: {currentXP}/{xpToNextLevel}");
-        DebugLogger.Log($"Premium: {(hasPremiumPass ? "✅ ACTIVE" : "❌ INACTIVE (100 VEXA to unlock)")}");
+        DebugLogger.Log($"Premium: {(hasPremiumPass ? " ACTIVE" : "❌ INACTIVE (100 VEXA to unlock)")}");
         DebugLogger.Log("================================");
         
         // Show next 5 rewards

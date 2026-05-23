@@ -211,7 +211,7 @@ public class MasterGameManager : MonoBehaviour
             int loot = Random.Range(30, 100);
             _wood += loot;
             AddXP(20);
-            UIManager?.ShowNotification($"🏆 VICTORY! +{loot} wood!", Color.green);
+            UIManager?.ShowNotification($" VICTORY! +{loot} wood!", Color.green);
             TutorialSystem?.CheckAction("raid");
         }
         else
@@ -253,7 +253,7 @@ public class MasterGameManager : MonoBehaviour
         {
             _currentXP -= needed;
             _playerLevel++;
-            UIManager?.ShowNotification($"🎉 LEVEL {_playerLevel}!", Color.yellow);
+            UIManager?.ShowNotification($" LEVEL {_playerLevel}!", Color.yellow);
             _coins += 200;
             _gems += 50;
         }

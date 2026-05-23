@@ -74,18 +74,18 @@ public class DailyLoginStreak : MonoBehaviour
         // Special rewards for milestones
         if (currentStreak == 7)
         {
-            DebugLogger.Log("🎉 7 DAY STREAK! +100 GEMS!");
+            DebugLogger.Log(" 7 DAY STREAK! +100 GEMS!");
             currency?.AddGems(100);
         }
         else if (currentStreak == 30)
         {
-            DebugLogger.Log("🎉🎉 30 DAY STREAK! LEGENDARY CHEST!");
+            DebugLogger.Log(" 30 DAY STREAK! LEGENDARY CHEST!");
             var chest = GetComponent<ChestSystem>();
             if (chest != null) chest.chestCount += 3;
         }
         else if (currentStreak == 100)
         {
-            DebugLogger.Log("🎉🎉🎉 100 DAY STREAK! ULTIMATE REWARD!");
+            DebugLogger.Log(" 100 DAY STREAK! ULTIMATE REWARD!");
             currency?.AddGems(1000);
         }
         
@@ -112,7 +112,7 @@ public class DailyLoginStreak : MonoBehaviour
     public void ShowStreakInfo()
     {
         DebugLogger.Log($"🔥 Current Streak: {currentStreak} days");
-        DebugLogger.Log($"🏆 Best Streak: {bestStreak} days");
+        DebugLogger.Log($" Best Streak: {bestStreak} days");
         DebugLogger.Log($"⭐ Tomorrow's reward: {50 + ((currentStreak + 1) * 10)} coins");
     }
 }

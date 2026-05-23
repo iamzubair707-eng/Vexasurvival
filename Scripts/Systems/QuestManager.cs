@@ -69,13 +69,13 @@ public class QuestManager : MonoBehaviour
             resourceManager.AddResource("vexa", q.rewardVexa);
         }
         
-        DebugLogger.Log($"🎉 QUEST COMPLETE: {q.title}! +{q.rewardVexa} VEXA");
+        DebugLogger.Log($" QUEST COMPLETE: {q.title}! +{q.rewardVexa} VEXA");
         
         // Show notification
         NotificationManager notif = GetComponent<NotificationManager>();
         if (notif != null)
         {
-            notif.ShowNotification($"✅ Quest Complete! {q.title} - +{q.rewardVexa} VEXA", "success");
+            notif.ShowNotification($" Quest Complete! {q.title} - +{q.rewardVexa} VEXA", "success");
         }
         
         SaveQuestProgress(q);
@@ -103,7 +103,7 @@ public class QuestManager : MonoBehaviour
         DebugLogger.Log("========== DAILY QUESTS ==========");
         foreach (Quest q in quests)
         {
-            string status = q.isCompleted ? "✅" : $"📊 {q.progress}/{q.requiredAmount}";
+            string status = q.isCompleted ? "" : $"📊 {q.progress}/{q.requiredAmount}";
             DebugLogger.Log($"{status} {q.title} → {q.rewardVexa} VEXA");
         }
         DebugLogger.Log("==================================");

@@ -148,7 +148,7 @@ public class DeadlineSystem : MonoBehaviour
                 // 1 hour remaining - send urgent notification
                 if (!PlayerPrefs.HasKey($"Notified_{evt.eventId}"))
                 {
-                    SendNotification($"⚠️ URGENT: {evt.eventName}", $"Ends in {(evt.endTime - DateTime.Now).Hours}h {(evt.endTime - DateTime.Now).Minutes}m! Claim now!");
+                    SendNotification($" URGENT: {evt.eventName}", $"Ends in {(evt.endTime - DateTime.Now).Hours}h {(evt.endTime - DateTime.Now).Minutes}m! Claim now!");
                     PlayerPrefs.SetInt($"Notified_{evt.eventId}", 1);
                 }
             }
@@ -184,7 +184,7 @@ public class DeadlineSystem : MonoBehaviour
         evt.isCompleted = true;
         evt.isActive = false;
         
-        SendNotification($"🎉 CLAIMED: {evt.eventName}!", $"You got {GetRewardDescription(evt.reward)}!");
+        SendNotification($" CLAIMED: {evt.eventName}!", $"You got {GetRewardDescription(evt.reward)}!");
         
         activeEvents.Remove(evt);
         completedEvents.Add(evt);
@@ -247,9 +247,9 @@ public class DeadlineSystem : MonoBehaviour
     
     public void ShowActiveDeadlines()
     {
-        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("");
         DebugLogger.Log("⏰ ACTIVE TIME-LIMITED EVENTS");
-        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("");
         
         foreach (var evt in activeEvents)
         {
@@ -259,7 +259,7 @@ public class DeadlineSystem : MonoBehaviour
             DebugLogger.Log($"   ⏱️ Remaining: {remaining.Hours}h {remaining.Minutes}m {remaining.Seconds}s");
             DebugLogger.Log($"   🎁 Reward: {GetRewardDescription(evt.reward)}");
             DebugLogger.Log($"   📊 Progress: {evt.GetProgressPercentage():F0}%");
-            DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            DebugLogger.Log("");
         }
         
         if (activeEvents.Count == 0)

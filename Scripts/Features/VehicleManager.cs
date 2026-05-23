@@ -91,7 +91,7 @@ public class VehicleManager : MonoBehaviour
             v.isEquipped = (v.vehicleName == vehicleName && v.isOwned);
         }
         activeVehicle = availableVehicles.Find(v => v.isEquipped);
-        DebugLogger.Log($"🔧 Equipped: {activeVehicle?.vehicleName}");
+        DebugLogger.Log($" Equipped: {activeVehicle?.vehicleName}");
     }
     
     public bool ConsumeFuel(float amount)

@@ -23,11 +23,11 @@ public class MoralChoiceManager : MonoBehaviour
     
     public void PresentChoice(MoralChoice choice)
     {
-        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"");
         DebugLogger.Log($"⚖️ {choice.question}");
         DebugLogger.Log($"1️⃣ {choice.option1} (+{choice.moralityGain1} morality)");
         DebugLogger.Log($"2️⃣ {choice.option2} ({choice.moralityGain2} morality)");
-        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"");
     }
     
     public void MakeChoice(int choiceIndex, MoralChoice choice)
@@ -40,7 +40,7 @@ public class MoralChoiceManager : MonoBehaviour
         ApplyLongTermEffect(gain);
         SaveMorality();
         
-        DebugLogger.Log($"✅ Morality changed by {gain}. Now: {moralityPoints} ({moralityTier})");
+        DebugLogger.Log($" Morality changed by {gain}. Now: {moralityPoints} ({moralityTier})");
     }
     
     void UpdateMoralityTier()

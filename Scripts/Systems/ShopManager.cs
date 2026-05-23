@@ -75,7 +75,7 @@ public class ShopManager : MonoBehaviour
                 break;
                 
             case "shield":
-                DebugLogger.Log($"🛡️ Shield active for {item.effectValue} seconds!");
+                DebugLogger.Log($" Shield active for {item.effectValue} seconds!");
                 PlayerPrefs.SetInt("ShieldActive", 1);
                 PlayerPrefs.SetFloat("ShieldEndTime", Time.time + item.effectValue);
                 break;

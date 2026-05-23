@@ -27,9 +27,9 @@ public class PrivacyPolicy : MonoBehaviour
     
     string GetPrivacyText()
     {
-        return "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+        return "\n" +
                "🔒 PRIVACY POLICY - VEXA SURVIVAL\n" +
-               "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n" +
+               "\n\n" +
                "We collect:\n" +
                "• Username and game progress\n" +
                "• Play time and statistics\n" +
@@ -42,7 +42,7 @@ public class PrivacyPolicy : MonoBehaviour
                "We don't sell or share your data.\n\n" +
                "You can delete all data anytime:\n" +
                "Settings → Delete Account\n\n" +
-               "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+               "\n" +
                "Do you accept these terms?";
     }
     
@@ -50,7 +50,7 @@ public class PrivacyPolicy : MonoBehaviour
     {
         PlayerPrefs.SetInt("PrivacyAccepted", 1);
         privacyPanel.SetActive(false);
-        DebugLogger.Log("✅ Privacy policy accepted");
+        DebugLogger.Log(" Privacy policy accepted");
     }
     
     void DeclinePrivacy()

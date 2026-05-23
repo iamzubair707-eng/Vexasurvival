@@ -70,7 +70,7 @@ public class CoreResources : MonoBehaviour
         }
         UpdateUI();
         SaveResources();
-        DebugLogger.Log($"✅ +{amount} {type}!");
+        DebugLogger.Log($" +{amount} {type}!");
     }
     
     void GeneratePassiveResources()
@@ -90,7 +90,7 @@ public class CoreResources : MonoBehaviour
     {
         if (foodText != null) foodText.text = $"🍔 {food}/{maxFood}";
         if (waterText != null) waterText.text = $"💧 {water}/{maxWater}";
-        if (scrapText != null) scrapText.text = $"🔧 {scrap}/{maxScrap}";
+        if (scrapText != null) scrapText.text = $" {scrap}/{maxScrap}";
         if (fuelText != null) fuelText.text = $"⛽ {fuel}/{maxFuel}";
     }
     

@@ -71,7 +71,7 @@ public class CombatSystem : MonoBehaviour
         
         if (defenseSystem != null && defenseSystem.isShieldActive)
         {
-            DebugLogger.Log("🛡️ Shield protected the base!");
+            DebugLogger.Log(" Shield protected the base!");
             return;
         }
         
@@ -85,7 +85,7 @@ public class CombatSystem : MonoBehaviour
         }
         else
         {
-            DebugLogger.Log("🏆 Defense successful!");
+            DebugLogger.Log(" Defense successful!");
         }
     }
 }

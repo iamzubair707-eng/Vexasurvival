@@ -93,7 +93,7 @@ public class UserProfile : MonoBehaviour
         {
             xp -= level * 100;
             level++;
-            DebugLogger.Log($"🎉 Level Up! Now Level {level}");
+            DebugLogger.Log($" Level Up! Now Level {level}");
             
             // Check level achievement
             CheckAchievements("level");
@@ -107,27 +107,27 @@ public class UserProfile : MonoBehaviour
         if (type == "raidWin" && totalRaidsWon >= 10 && !unlockedAchievements.Contains("RAIDER"))
         {
             unlockedAchievements.Add("RAIDER");
-            DebugLogger.Log("🏆 Achievement Unlocked: RAIDER (10 raid wins)");
+            DebugLogger.Log(" Achievement Unlocked: RAIDER (10 raid wins)");
         }
         
         if (type == "raidWin" && totalRaidsWon >= 100 && !unlockedAchievements.Contains("WARLORD"))
         {
             unlockedAchievements.Add("WARLORD");
-            DebugLogger.Log("🏆 Achievement Unlocked: WARLORD (100 raid wins)");
+            DebugLogger.Log(" Achievement Unlocked: WARLORD (100 raid wins)");
         }
         
         // Resource achievements
         if (type == "resources" && totalResourcesCollected >= 1000 && !unlockedAchievements.Contains("RESOURCEFUL"))
         {
             unlockedAchievements.Add("RESOURCEFUL");
-            DebugLogger.Log("🏆 Achievement Unlocked: RESOURCEFUL (1000 resources)");
+            DebugLogger.Log(" Achievement Unlocked: RESOURCEFUL (1000 resources)");
         }
         
         // VEXA achievements
         if (type == "vexa" && totalVexaEarned >= 100 && !unlockedAchievements.Contains("WEALTHY"))
         {
             unlockedAchievements.Add("WEALTHY");
-            DebugLogger.Log("🏆 Achievement Unlocked: WEALTHY (100 VEXA earned)");
+            DebugLogger.Log(" Achievement Unlocked: WEALTHY (100 VEXA earned)");
         }
         
         // Level achievements
@@ -136,12 +136,12 @@ public class UserProfile : MonoBehaviour
             if (level >= 10 && !unlockedAchievements.Contains("VETERAN"))
             {
                 unlockedAchievements.Add("VETERAN");
-                DebugLogger.Log("🏆 Achievement Unlocked: VETERAN (Level 10)");
+                DebugLogger.Log(" Achievement Unlocked: VETERAN (Level 10)");
             }
             if (level >= 50 && !unlockedAchievements.Contains("LEGEND"))
             {
                 unlockedAchievements.Add("LEGEND");
-                DebugLogger.Log("🏆 Achievement Unlocked: LEGEND (Level 50)");
+                DebugLogger.Log(" Achievement Unlocked: LEGEND (Level 50)");
             }
         }
         
@@ -222,32 +222,32 @@ public class UserProfile : MonoBehaviour
     
     public void ShowProfile()
     {
-        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("");
         DebugLogger.Log($"👤 USER PROFILE");
-        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"");
         DebugLogger.Log($"Name: {username} (ID: {userId})");
         DebugLogger.Log($"Level: {level} | XP: {xp}/{level * 100}");
         DebugLogger.Log($"Play Time: {totalPlayTime} minutes");
         DebugLogger.Log($"Joined: {joinDate}");
-        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"");
         DebugLogger.Log($"📊 STATS");
-        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"");
         DebugLogger.Log($"Raids: {totalRaidsWon}W / {totalRaidsLost}L");
         DebugLogger.Log($"Resources Collected: {totalResourcesCollected}");
         DebugLogger.Log($"VEXA Earned: {totalVexaEarned}");
         DebugLogger.Log($"Current Streak: {currentStreak} days");
         DebugLogger.Log($"Best Streak: {bestStreak} days");
-        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        DebugLogger.Log($"🏆 ACHIEVEMENTS");
-        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"");
+        DebugLogger.Log($" ACHIEVEMENTS");
+        DebugLogger.Log($"");
         if (unlockedAchievements.Count == 0)
             DebugLogger.Log("No achievements yet!");
         else
             foreach (string ach in unlockedAchievements)
                 DebugLogger.Log($"⭐ {ach}");
-        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"");
         DebugLogger.Log($"🔒 PRIVACY SETTINGS");
-        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"");
         DebugLogger.Log(GetPrivacySettings());
     }
     

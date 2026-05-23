@@ -55,7 +55,7 @@ public class ClanSystem : MonoBehaviour
         currentClan = targetClan;
         
         SaveClans();
-        DebugLogger.Log($"✅ {playerName} joined clan '{clanName}'!");
+        DebugLogger.Log($" {playerName} joined clan '{clanName}'!");
         return true;
     }
     
@@ -84,7 +84,7 @@ public class ClanSystem : MonoBehaviour
         if (currentClan.totalVexa > enemyClan.totalVexa)
         {
             int reward = currentClan.totalVexa / 10;
-            DebugLogger.Log($"🏆 {currentClan.clanName} WINS! Reward: {reward} VEXA each!");
+            DebugLogger.Log($" {currentClan.clanName} WINS! Reward: {reward} VEXA each!");
         }
         else
         {

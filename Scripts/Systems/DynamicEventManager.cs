@@ -126,7 +126,7 @@ public class DynamicEventManager : MonoBehaviour
     
     void EndCurrentEvent()
     {
-        DebugLogger.Log($"✅ Event ended: {currentEvent.eventName}");
+        DebugLogger.Log($" Event ended: {currentEvent.eventName}");
         globalEventMultiplier = 1f;
         currentEvent = null;
         SaveEventData();

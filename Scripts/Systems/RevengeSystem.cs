@@ -35,9 +35,9 @@ public class RevengeSystem : MonoBehaviour
     
     public void ShowRevengeList()
     {
-        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("");
         DebugLogger.Log("⚔️ REVENGE LIST");
-        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("");
         foreach (string name in revengeList)
             DebugLogger.Log($"🔪 {name} - Attack to take revenge!");
         

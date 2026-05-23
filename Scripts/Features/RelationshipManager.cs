@@ -103,7 +103,7 @@ public class RelationshipManager : MonoBehaviour
         CoreResources resources = GetComponent<CoreResources>();
         int stolenAmount = Random.Range(20, 50);
         resources.SpendResource("scrap", stolenAmount);
-        DebugLogger.Log($"⚠️ {s.name} stole {stolenAmount} scrap as revenge!");
+        DebugLogger.Log($" {s.name} stole {stolenAmount} scrap as revenge!");
     }
     
     void SaveRelationships()

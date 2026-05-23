@@ -83,7 +83,7 @@ public class MentalHealthSystem : MonoBehaviour
             OnMentalStateChanged?.Invoke(currentState);
             ApplyStateEffects();
             
-            MasterGameManager.Instance?.UIManager?.ShowNotification($"⚠️ Survivors are {currentState}!", Color.yellow);
+            MasterGameManager.Instance?.UIManager?.ShowNotification($" Survivors are {currentState}!", Color.yellow);
         }
     }
     
@@ -98,7 +98,7 @@ public class MentalHealthSystem : MonoBehaviour
                 DebugLogger.Log("😔 Depressed: -50% production, cannot raid");
                 break;
             case MentalState.Rebellious:
-                DebugLogger.Log("⚠️ Rebellious: May refuse to work!");
+                DebugLogger.Log(" Rebellious: May refuse to work!");
                 TriggerRebellion();
                 break;
             case MentalState.Insane:

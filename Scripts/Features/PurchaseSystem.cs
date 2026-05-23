@@ -64,7 +64,7 @@ public class PurchaseSystem : MonoBehaviour
         if (success)
         {
             UnlockItem(item);
-            DebugLogger.Log($"✅ Purchased: {item.itemName} with {currencyType}!");
+            DebugLogger.Log($" Purchased: {item.itemName} with {currencyType}!");
         }
         else
         {
@@ -97,14 +97,14 @@ public class PurchaseSystem : MonoBehaviour
         // Show notification
         NotificationManager notif = GetComponent<NotificationManager>();
         if (notif != null)
-            notif.ShowNotification($"🎉 {item.itemName} Unlocked!", "success");
+            notif.ShowNotification($" {item.itemName} Unlocked!", "success");
     }
     
     public void ShowShop()
     {
-        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("");
         DebugLogger.Log("🛒 ITEM SHOP");
-        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("");
         
         DebugLogger.Log("👔 COSTUMES");
         foreach (var item in shopItems.FindAll(i => i.category == "costume"))
@@ -122,6 +122,6 @@ public class PurchaseSystem : MonoBehaviour
         foreach (var item in shopItems.FindAll(i => i.category == "special"))
             DebugLogger.Log($"   {item.itemName} — {item.coinCost}🪙 / {item.gemCost}💎");
         
-        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("");
     }
 }

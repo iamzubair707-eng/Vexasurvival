@@ -29,7 +29,7 @@ public class CrossServerWar : MonoBehaviour
         if (isWarActive)
         {
             warPoints += points;
-            DebugLogger.Log($"🏆 War contribution: {warPoints} points");
+            DebugLogger.Log($" War contribution: {warPoints} points");
             
             if (warPoints >= 1000)
             {
@@ -42,7 +42,7 @@ public class CrossServerWar : MonoBehaviour
     {
         if (victory)
         {
-            DebugLogger.Log("🏆 CROSS-SERVER WAR VICTORY!");
+            DebugLogger.Log(" CROSS-SERVER WAR VICTORY!");
             // Give all players rewards
             CurrencyManager currency = GetComponent<CurrencyManager>();
             currency.AddGems(500);

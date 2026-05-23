@@ -11,9 +11,9 @@ public class TutorialSystem : MonoBehaviour
         "👋 Welcome to VEXA SURVIVAL!\n\nTap GATHER to collect wood and stone!",
         "🏗️ Tap UPGRADE to improve your building.\n\nHigher level = more resources!",
         "⚔️ Tap TRAIN to recruit soldiers.\n\nYou need troops for raids!",
-        "🎯 Tap RAID to attack enemies.\n\nWin = resources + XP!",
+        " Tap RAID to attack enemies.\n\nWin = resources + XP!",
         "🎁 Tap CHEST for free rewards every 3 hours!\n\nDon't miss it!",
-        "🎉 TUTORIAL COMPLETE!\n\n+500 coins, +50 gems rewarded!"
+        " TUTORIAL COMPLETE!\n\n+500 coins, +50 gems rewarded!"
     };
     
     private readonly string[] _requiredActions = {
@@ -69,7 +69,7 @@ public class TutorialSystem : MonoBehaviour
         var gm = MasterGameManager.Instance;
         gm?.GatherResource("wood", 0); // Just to trigger, actual rewards in GM
         
-        _ui?.ShowNotification("🎉 TUTORIAL COMPLETE! +500 coins, +50 gems!", Color.green, 4f);
+        _ui?.ShowNotification(" TUTORIAL COMPLETE! +500 coins, +50 gems!", Color.green, 4f);
     }
     
     public void StartTutorial() => StartCoroutine(StartTutorial());

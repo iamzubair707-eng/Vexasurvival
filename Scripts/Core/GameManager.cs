@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     
     void InitializeAllSystems()
     {
-        DebugLogger.Log("🚀 Initializing VEXA SURVIVAL...");
+        DebugLogger.Log(" Initializing VEXA SURVIVAL...");
         
         // Find or create systems
         ResourceManager = GetComponent<ResourceManager>() ?? gameObject.AddComponent<ResourceManager>();
@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
         ClanSystem = GetComponent<ClanSystem>() ?? gameObject.AddComponent<ClanSystem>();
         
         IsInitialized = true;
-        DebugLogger.Log("✅ All systems initialized!");
+        DebugLogger.Log(" All systems initialized!");
         
         // Load saved data
         DataManager?.LoadGame();
