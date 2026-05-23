@@ -72,7 +72,7 @@ public class CompleteSaveSystem : MonoBehaviour
         string path = Application.persistentDataPath + "/gamesave.json";
         File.WriteAllText(path, json);
         
-        Debug.Log($"💾 Game saved at {data.saveTime}");
+        DebugLogger.Log($"💾 Game saved at {data.saveTime}");
     }
     
     public bool LoadGame()
@@ -81,7 +81,7 @@ public class CompleteSaveSystem : MonoBehaviour
         
         if (!File.Exists(path))
         {
-            Debug.Log("No save file found. Starting new game.");
+            DebugLogger.Log("No save file found. Starting new game.");
             return false;
         }
         
@@ -118,7 +118,7 @@ public class CompleteSaveSystem : MonoBehaviour
             currency.gems = data.gems;
         }
         
-        Debug.Log($"💾 Game loaded from {data.saveTime}");
+        DebugLogger.Log($"💾 Game loaded from {data.saveTime}");
         return true;
     }
     
@@ -127,6 +127,6 @@ public class CompleteSaveSystem : MonoBehaviour
         string path = Application.persistentDataPath + "/gamesave.json";
         if (File.Exists(path))
             File.Delete(path);
-        Debug.Log("🗑️ Save file deleted!");
+        DebugLogger.Log("🗑️ Save file deleted!");
     }
 }

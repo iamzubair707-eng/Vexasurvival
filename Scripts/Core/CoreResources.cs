@@ -47,7 +47,7 @@ public class CoreResources : MonoBehaviour
                 if (fuel >= amount) { fuel -= amount; UpdateUI(); SaveResources(); return true; }
                 break;
         }
-        Debug.Log($"❌ Not enough {type}!");
+        DebugLogger.Log($"❌ Not enough {type}!");
         return false;
     }
     
@@ -70,7 +70,7 @@ public class CoreResources : MonoBehaviour
         }
         UpdateUI();
         SaveResources();
-        Debug.Log($"✅ +{amount} {type}!");
+        DebugLogger.Log($"✅ +{amount} {type}!");
     }
     
     void GeneratePassiveResources()

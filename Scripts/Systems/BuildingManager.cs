@@ -19,7 +19,7 @@ public class BuildingManager : MonoBehaviour
         
         if (building == null)
         {
-            Debug.Log("Building not found!");
+            DebugLogger.Log("Building not found!");
             return false;
         }
         
@@ -30,14 +30,14 @@ public class BuildingManager : MonoBehaviour
             building.isBuilt = true;
             building.level = 1;
             SaveBuildings();
-            Debug.Log($"{buildingName} built!");
+            DebugLogger.Log($"{buildingName} built!");
             
             // Apply building effect
             ApplyBuildingEffect(building);
             return true;
         }
         
-        Debug.Log($"Not enough resources for {buildingName}!");
+        DebugLogger.Log($"Not enough resources for {buildingName}!");
         return false;
     }
     
@@ -56,7 +56,7 @@ public class BuildingManager : MonoBehaviour
         {
             building.level++;
             SaveBuildings();
-            Debug.Log($"{buildingName} upgraded to level {building.level}!");
+            DebugLogger.Log($"{buildingName} upgraded to level {building.level}!");
             ApplyBuildingEffect(building);
             return true;
         }
@@ -69,16 +69,16 @@ public class BuildingManager : MonoBehaviour
         switch (building.name)
         {
             case "Farm":
-                Debug.Log("Food production +" + (5 * building.level));
+                DebugLogger.Log("Food production +" + (5 * building.level));
                 break;
             case "Mine":
-                Debug.Log("Stone production +" + (3 * building.level));
+                DebugLogger.Log("Stone production +" + (3 * building.level));
                 break;
             case "LumberMill":
-                Debug.Log("Wood production +" + (5 * building.level));
+                DebugLogger.Log("Wood production +" + (5 * building.level));
                 break;
             case "Turret":
-                Debug.Log("Defense +" + (10 * building.level));
+                DebugLogger.Log("Defense +" + (10 * building.level));
                 break;
         }
     }

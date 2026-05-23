@@ -18,7 +18,7 @@ public class DailyReward : MonoBehaviour
         
         if (lastClaimDate == today)
         {
-            Debug.Log("Already claimed today!");
+            DebugLogger.Log("Already claimed today!");
             return;
         }
         
@@ -37,7 +37,7 @@ public class DailyReward : MonoBehaviour
         
         // Reward based on streak
         int reward = GetReward();
-        Debug.Log($"Day {currentStreak} Reward: {reward} VEXA");
+        DebugLogger.Log($"Day {currentStreak} Reward: {reward} VEXA");
         
         lastClaimDate = today;
         SaveData();

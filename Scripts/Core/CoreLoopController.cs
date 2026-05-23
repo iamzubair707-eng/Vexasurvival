@@ -62,7 +62,7 @@ public class CoreLoopController : MonoBehaviour
         if (resources != null)
         {
             resources.AddResource(type, amount);
-            Debug.Log($"📦 Gathered {amount} {type}!");
+            DebugLogger.Log($"📦 Gathered {amount} {type}!");
             
             // Visual feedback
             if (AudioManager.Instance != null)
@@ -79,7 +79,7 @@ public class CoreLoopController : MonoBehaviour
         if (currency != null && currency.SpendCoins(cost))
         {
             buildingLevel++;
-            Debug.Log($"🏗️ Building upgraded to level {buildingLevel}!");
+            DebugLogger.Log($"🏗️ Building upgraded to level {buildingLevel}!");
             
             if (AudioManager.Instance != null)
                 AudioManager.Instance.BuildComplete();
@@ -88,7 +88,7 @@ public class CoreLoopController : MonoBehaviour
         }
         else
         {
-            Debug.Log("❌ Not enough coins to upgrade!");
+            DebugLogger.Log("❌ Not enough coins to upgrade!");
         }
     }
     
@@ -99,7 +99,7 @@ public class CoreLoopController : MonoBehaviour
         if (currency != null && currency.SpendCoins(cost))
         {
             troopCount++;
-            Debug.Log($"⚔️ Troop trained! Total troops: {troopCount}");
+            DebugLogger.Log($"⚔️ Troop trained! Total troops: {troopCount}");
             
             if (AudioManager.Instance != null)
                 AudioManager.Instance.ButtonClick();
@@ -108,7 +108,7 @@ public class CoreLoopController : MonoBehaviour
         }
         else
         {
-            Debug.Log("❌ Not enough coins to train troop!");
+            DebugLogger.Log("❌ Not enough coins to train troop!");
         }
     }
     
@@ -116,14 +116,14 @@ public class CoreLoopController : MonoBehaviour
     {
         if (troopCount <= 0)
         {
-            Debug.Log("❌ No troops to send on raid! Train some first!");
+            DebugLogger.Log("❌ No troops to send on raid! Train some first!");
             return;
         }
         
         if (pveRaid != null)
         {
             pveRaid.StartRaid(PVERaidSystem.RaidType.ZombieHorde);
-            Debug.Log($"⚔️ Raid started with {troopCount} troops!");
+            DebugLogger.Log($"⚔️ Raid started with {troopCount} troops!");
             
             if (AudioManager.Instance != null)
                 AudioManager.Instance.RaidStart();
@@ -137,7 +137,7 @@ public class CoreLoopController : MonoBehaviour
             var reward = chests.OpenChest();
             if (reward != null)
             {
-                Debug.Log($"🎁 Chest opened! Got: {reward.rewardType} x{reward.amount}");
+                DebugLogger.Log($"🎁 Chest opened! Got: {reward.rewardType} x{reward.amount}");
                 
                 if (AudioManager.Instance != null)
                     AudioManager.Instance.CoinCollect();

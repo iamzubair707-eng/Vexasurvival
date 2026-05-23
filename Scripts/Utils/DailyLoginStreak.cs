@@ -51,7 +51,7 @@ public class DailyLoginStreak : MonoBehaviour
             PlayerPrefs.SetString("LastLoginDate", today);
             SaveStreakData();
             
-            Debug.Log($"🔥 Daily Login Streak: {currentStreak} days! Best: {bestStreak}");
+            DebugLogger.Log($"🔥 Daily Login Streak: {currentStreak} days! Best: {bestStreak}");
             
             // Send notification for next day
             SendStreakNotification();
@@ -74,27 +74,27 @@ public class DailyLoginStreak : MonoBehaviour
         // Special rewards for milestones
         if (currentStreak == 7)
         {
-            Debug.Log("🎉 7 DAY STREAK! +100 GEMS!");
+            DebugLogger.Log("🎉 7 DAY STREAK! +100 GEMS!");
             currency?.AddGems(100);
         }
         else if (currentStreak == 30)
         {
-            Debug.Log("🎉🎉 30 DAY STREAK! LEGENDARY CHEST!");
+            DebugLogger.Log("🎉🎉 30 DAY STREAK! LEGENDARY CHEST!");
             var chest = GetComponent<ChestSystem>();
             if (chest != null) chest.chestCount += 3;
         }
         else if (currentStreak == 100)
         {
-            Debug.Log("🎉🎉🎉 100 DAY STREAK! ULTIMATE REWARD!");
+            DebugLogger.Log("🎉🎉🎉 100 DAY STREAK! ULTIMATE REWARD!");
             currency?.AddGems(1000);
         }
         
-        Debug.Log($"💰 Daily reward: +{coinsReward} coins, +{gemsReward} gems");
+        DebugLogger.Log($"💰 Daily reward: +{coinsReward} coins, +{gemsReward} gems");
     }
     
     void SendStreakNotification()
     {
-        Debug.Log($"📱 Tomorrow: {currentStreak + 1} day streak awaits!");
+        DebugLogger.Log($"📱 Tomorrow: {currentStreak + 1} day streak awaits!");
     }
     
     void SaveStreakData()
@@ -111,8 +111,8 @@ public class DailyLoginStreak : MonoBehaviour
     
     public void ShowStreakInfo()
     {
-        Debug.Log($"🔥 Current Streak: {currentStreak} days");
-        Debug.Log($"🏆 Best Streak: {bestStreak} days");
-        Debug.Log($"⭐ Tomorrow's reward: {50 + ((currentStreak + 1) * 10)} coins");
+        DebugLogger.Log($"🔥 Current Streak: {currentStreak} days");
+        DebugLogger.Log($"🏆 Best Streak: {bestStreak} days");
+        DebugLogger.Log($"⭐ Tomorrow's reward: {50 + ((currentStreak + 1) * 10)} coins");
     }
 }

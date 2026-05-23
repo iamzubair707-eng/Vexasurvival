@@ -129,7 +129,7 @@ public class DeadlineSystem : MonoBehaviour
             
             if (DateTime.Now >= evt.endTime)
             {
-                Debug.Log($"⏰ DEADLINE PASSED: {evt.eventName}");
+                DebugLogger.Log($"⏰ DEADLINE PASSED: {evt.eventName}");
                 
                 if (!evt.isCompleted)
                 {
@@ -163,19 +163,19 @@ public class DeadlineSystem : MonoBehaviour
         
         if (evt == null)
         {
-            Debug.Log("❌ Event not found!");
+            DebugLogger.Log("❌ Event not found!");
             return false;
         }
         
         if (DateTime.Now > evt.endTime)
         {
-            Debug.Log($"❌ Event '{evt.eventName}' has expired!");
+            DebugLogger.Log($"❌ Event '{evt.eventName}' has expired!");
             return false;
         }
         
         if (evt.isCompleted)
         {
-            Debug.Log($"❌ Event '{evt.eventName}' already claimed!");
+            DebugLogger.Log($"❌ Event '{evt.eventName}' already claimed!");
             return false;
         }
         
@@ -201,12 +201,12 @@ public class DeadlineSystem : MonoBehaviour
         {
             case "coins":
                 currency?.AddCoins(reward.amount);
-                Debug.Log($"💰 +{reward.amount} Coins from event!");
+                DebugLogger.Log($"💰 +{reward.amount} Coins from event!");
                 break;
                 
             case "gems":
                 currency?.AddGems(reward.amount);
-                Debug.Log($"💎 +{reward.amount} Gems from event!");
+                DebugLogger.Log($"💎 +{reward.amount} Gems from event!");
                 break;
                 
             case "chest":
@@ -214,18 +214,18 @@ public class DeadlineSystem : MonoBehaviour
                 if (chest != null)
                 {
                     chest.chestCount++;
-                    Debug.Log($"🎁 +1 Free Chest!");
+                    DebugLogger.Log($"🎁 +1 Free Chest!");
                 }
                 break;
                 
             case "boost":
-                Debug.Log($"⚡ Boost activated: {reward.amount}X for 24 hours!");
+                DebugLogger.Log($"⚡ Boost activated: {reward.amount}X for 24 hours!");
                 PlayerPrefs.SetInt($"Boost_active", 1);
                 PlayerPrefs.SetFloat($"Boost_endTime", Time.time + 86400);
                 break;
                 
             case "discount":
-                Debug.Log($"💰 {reward.amount}% discount on {reward.itemName}!");
+                DebugLogger.Log($"💰 {reward.amount}% discount on {reward.itemName}!");
                 PlayerPrefs.SetInt($"Discount_{reward.itemName}", reward.amount);
                 PlayerPrefs.SetFloat($"Discount_endTime", Time.time + 86400);
                 break;
@@ -247,28 +247,28 @@ public class DeadlineSystem : MonoBehaviour
     
     public void ShowActiveDeadlines()
     {
-        Debug.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Debug.Log("⏰ ACTIVE TIME-LIMITED EVENTS");
-        Debug.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("⏰ ACTIVE TIME-LIMITED EVENTS");
+        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         
         foreach (var evt in activeEvents)
         {
             TimeSpan remaining = evt.GetRemainingTime();
-            Debug.Log($"🔥 {evt.eventName}");
-            Debug.Log($"   📝 {evt.description}");
-            Debug.Log($"   ⏱️ Remaining: {remaining.Hours}h {remaining.Minutes}m {remaining.Seconds}s");
-            Debug.Log($"   🎁 Reward: {GetRewardDescription(evt.reward)}");
-            Debug.Log($"   📊 Progress: {evt.GetProgressPercentage():F0}%");
-            Debug.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            DebugLogger.Log($"🔥 {evt.eventName}");
+            DebugLogger.Log($"   📝 {evt.description}");
+            DebugLogger.Log($"   ⏱️ Remaining: {remaining.Hours}h {remaining.Minutes}m {remaining.Seconds}s");
+            DebugLogger.Log($"   🎁 Reward: {GetRewardDescription(evt.reward)}");
+            DebugLogger.Log($"   📊 Progress: {evt.GetProgressPercentage():F0}%");
+            DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         }
         
         if (activeEvents.Count == 0)
-            Debug.Log("No active events right now. Check back soon!");
+            DebugLogger.Log("No active events right now. Check back soon!");
     }
     
     void SendNotification(string title, string message)
     {
-        Debug.Log($"📱🔔 {title} - {message}");
+        DebugLogger.Log($"📱🔔 {title} - {message}");
         
         var notif = GetComponent<NotificationManager>();
         if (notif != null)

@@ -60,7 +60,7 @@ public class UserProfile : MonoBehaviour
         username = "Player_" + userId;
         joinDate = System.DateTime.Now.ToString("yyyy-MM-dd");
         SaveProfile();
-        Debug.Log($"🆕 New profile created: {username} (ID: {userId})");
+        DebugLogger.Log($"🆕 New profile created: {username} (ID: {userId})");
     }
     
     public void UpdateStats(string statName, int amount)
@@ -93,7 +93,7 @@ public class UserProfile : MonoBehaviour
         {
             xp -= level * 100;
             level++;
-            Debug.Log($"🎉 Level Up! Now Level {level}");
+            DebugLogger.Log($"🎉 Level Up! Now Level {level}");
             
             // Check level achievement
             CheckAchievements("level");
@@ -107,27 +107,27 @@ public class UserProfile : MonoBehaviour
         if (type == "raidWin" && totalRaidsWon >= 10 && !unlockedAchievements.Contains("RAIDER"))
         {
             unlockedAchievements.Add("RAIDER");
-            Debug.Log("🏆 Achievement Unlocked: RAIDER (10 raid wins)");
+            DebugLogger.Log("🏆 Achievement Unlocked: RAIDER (10 raid wins)");
         }
         
         if (type == "raidWin" && totalRaidsWon >= 100 && !unlockedAchievements.Contains("WARLORD"))
         {
             unlockedAchievements.Add("WARLORD");
-            Debug.Log("🏆 Achievement Unlocked: WARLORD (100 raid wins)");
+            DebugLogger.Log("🏆 Achievement Unlocked: WARLORD (100 raid wins)");
         }
         
         // Resource achievements
         if (type == "resources" && totalResourcesCollected >= 1000 && !unlockedAchievements.Contains("RESOURCEFUL"))
         {
             unlockedAchievements.Add("RESOURCEFUL");
-            Debug.Log("🏆 Achievement Unlocked: RESOURCEFUL (1000 resources)");
+            DebugLogger.Log("🏆 Achievement Unlocked: RESOURCEFUL (1000 resources)");
         }
         
         // VEXA achievements
         if (type == "vexa" && totalVexaEarned >= 100 && !unlockedAchievements.Contains("WEALTHY"))
         {
             unlockedAchievements.Add("WEALTHY");
-            Debug.Log("🏆 Achievement Unlocked: WEALTHY (100 VEXA earned)");
+            DebugLogger.Log("🏆 Achievement Unlocked: WEALTHY (100 VEXA earned)");
         }
         
         // Level achievements
@@ -136,12 +136,12 @@ public class UserProfile : MonoBehaviour
             if (level >= 10 && !unlockedAchievements.Contains("VETERAN"))
             {
                 unlockedAchievements.Add("VETERAN");
-                Debug.Log("🏆 Achievement Unlocked: VETERAN (Level 10)");
+                DebugLogger.Log("🏆 Achievement Unlocked: VETERAN (Level 10)");
             }
             if (level >= 50 && !unlockedAchievements.Contains("LEGEND"))
             {
                 unlockedAchievements.Add("LEGEND");
-                Debug.Log("🏆 Achievement Unlocked: LEGEND (Level 50)");
+                DebugLogger.Log("🏆 Achievement Unlocked: LEGEND (Level 50)");
             }
         }
         
@@ -204,7 +204,7 @@ public class UserProfile : MonoBehaviour
                 break;
         }
         SaveProfile();
-        Debug.Log($"Privacy setting changed: {setting} = {GetPrivacySettingValue(setting)}");
+        DebugLogger.Log($"Privacy setting changed: {setting} = {GetPrivacySettingValue(setting)}");
     }
     
     string GetPrivacySettingValue(string setting)
@@ -222,33 +222,33 @@ public class UserProfile : MonoBehaviour
     
     public void ShowProfile()
     {
-        Debug.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Debug.Log($"👤 USER PROFILE");
-        Debug.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Debug.Log($"Name: {username} (ID: {userId})");
-        Debug.Log($"Level: {level} | XP: {xp}/{level * 100}");
-        Debug.Log($"Play Time: {totalPlayTime} minutes");
-        Debug.Log($"Joined: {joinDate}");
-        Debug.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Debug.Log($"📊 STATS");
-        Debug.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Debug.Log($"Raids: {totalRaidsWon}W / {totalRaidsLost}L");
-        Debug.Log($"Resources Collected: {totalResourcesCollected}");
-        Debug.Log($"VEXA Earned: {totalVexaEarned}");
-        Debug.Log($"Current Streak: {currentStreak} days");
-        Debug.Log($"Best Streak: {bestStreak} days");
-        Debug.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Debug.Log($"🏆 ACHIEVEMENTS");
-        Debug.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"👤 USER PROFILE");
+        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"Name: {username} (ID: {userId})");
+        DebugLogger.Log($"Level: {level} | XP: {xp}/{level * 100}");
+        DebugLogger.Log($"Play Time: {totalPlayTime} minutes");
+        DebugLogger.Log($"Joined: {joinDate}");
+        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"📊 STATS");
+        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"Raids: {totalRaidsWon}W / {totalRaidsLost}L");
+        DebugLogger.Log($"Resources Collected: {totalResourcesCollected}");
+        DebugLogger.Log($"VEXA Earned: {totalVexaEarned}");
+        DebugLogger.Log($"Current Streak: {currentStreak} days");
+        DebugLogger.Log($"Best Streak: {bestStreak} days");
+        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"🏆 ACHIEVEMENTS");
+        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         if (unlockedAchievements.Count == 0)
-            Debug.Log("No achievements yet!");
+            DebugLogger.Log("No achievements yet!");
         else
             foreach (string ach in unlockedAchievements)
-                Debug.Log($"⭐ {ach}");
-        Debug.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Debug.Log($"🔒 PRIVACY SETTINGS");
-        Debug.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Debug.Log(GetPrivacySettings());
+                DebugLogger.Log($"⭐ {ach}");
+        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"🔒 PRIVACY SETTINGS");
+        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log(GetPrivacySettings());
     }
     
     void SaveProfile()

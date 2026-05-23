@@ -28,7 +28,7 @@ public class CurrencyManager : MonoBehaviour
         coins += amount;
         OnCoinsChanged?.Invoke(coins);
         SaveCurrencies();
-        Debug.Log($"💰 +{amount} Coins! Total: {coins}");
+        DebugLogger.Log($"💰 +{amount} Coins! Total: {coins}");
     }
     
     public bool SpendCoins(int amount)
@@ -40,7 +40,7 @@ public class CurrencyManager : MonoBehaviour
             SaveCurrencies();
             return true;
         }
-        Debug.Log($"❌ Not enough coins! Need {amount}, have {coins}");
+        DebugLogger.Log($"❌ Not enough coins! Need {amount}, have {coins}");
         return false;
     }
     
@@ -49,7 +49,7 @@ public class CurrencyManager : MonoBehaviour
         gems += amount;
         OnGemsChanged?.Invoke(gems);
         SaveCurrencies();
-        Debug.Log($"💎 +{amount} Gems! Total: {gems}");
+        DebugLogger.Log($"💎 +{amount} Gems! Total: {gems}");
     }
     
     public bool SpendGems(int amount)

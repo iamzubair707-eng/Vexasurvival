@@ -18,7 +18,7 @@ public class NotificationManager : MonoBehaviour
         Notification notif = new Notification(message, type);
         activeNotifications.Add(notif);
         
-        Debug.Log($"[{type.ToUpper()}] {message}");
+        DebugLogger.Log($"[{type.ToUpper()}] {message}");
         
         // Show on UI if prefab assigned
         if (notificationPrefab != null && notificationPanel != null)

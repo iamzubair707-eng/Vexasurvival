@@ -88,7 +88,7 @@ public class GridMovement : MonoBehaviour
         }
         else
         {
-            Debug.Log("Tile walkable nahi hai ya koi tile nahi mili.");
+            DebugLogger.Log("Tile walkable nahi hai ya koi tile nahi mili.");
         }
     }
 

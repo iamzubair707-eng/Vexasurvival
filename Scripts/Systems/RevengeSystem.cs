@@ -11,7 +11,7 @@ public class RevengeSystem : MonoBehaviour
         if (!revengeList.Contains(attackerName))
         {
             revengeList.Add(attackerName);
-            Debug.Log($"⚔️ {attackerName} added to revenge list!");
+            DebugLogger.Log($"⚔️ {attackerName} added to revenge list!");
             
             NotificationManager notif = GetComponent<NotificationManager>();
             if (notif != null)
@@ -23,7 +23,7 @@ public class RevengeSystem : MonoBehaviour
     {
         if (revengeList.Contains(targetName))
         {
-            Debug.Log($"💀 Taking revenge on {targetName}!");
+            DebugLogger.Log($"💀 Taking revenge on {targetName}!");
             // Trigger raid system
             RaidSystem raid = GetComponent<RaidSystem>();
             if (raid != null)
@@ -35,13 +35,13 @@ public class RevengeSystem : MonoBehaviour
     
     public void ShowRevengeList()
     {
-        Debug.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Debug.Log("⚔️ REVENGE LIST");
-        Debug.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("⚔️ REVENGE LIST");
+        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         foreach (string name in revengeList)
-            Debug.Log($"🔪 {name} - Attack to take revenge!");
+            DebugLogger.Log($"🔪 {name} - Attack to take revenge!");
         
         if (revengeList.Count == 0)
-            Debug.Log("No enemies yet. Stay safe!");
+            DebugLogger.Log("No enemies yet. Stay safe!");
     }
 }

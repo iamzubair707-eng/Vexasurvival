@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VexaSurvival")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+377c22d5d25603cdd2b63080db1360cf245e96b6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e62872e2ae98a3c7e384bbec72c20236a3a22b0e")]
 [assembly: System.Reflection.AssemblyProductAttribute("VexaSurvival")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VexaSurvival")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

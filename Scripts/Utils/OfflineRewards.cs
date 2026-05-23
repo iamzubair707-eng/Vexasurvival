@@ -44,7 +44,7 @@ public class OfflineRewards : MonoBehaviour
             resourceManager.AddResource("food", foodReward);
             currencyManager.AddCoins(coinReward);
             
-            Debug.Log($"🎁 Offline Rewards ({hoursOffline} hours): +{woodReward} Wood, +{stoneReward} Stone, +{foodReward} Food, +{coinReward} Coins");
+            DebugLogger.Log($"🎁 Offline Rewards ({hoursOffline} hours): +{woodReward} Wood, +{stoneReward} Stone, +{foodReward} Food, +{coinReward} Coins");
             
             NotificationManager notif = GetComponent<NotificationManager>();
             if (notif != null)

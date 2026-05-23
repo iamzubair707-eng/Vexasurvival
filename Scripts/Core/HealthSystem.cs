@@ -48,7 +48,7 @@ public class HealthSystem : MonoBehaviour
     
     void Die()
     {
-        Debug.Log("Player Died!");
+        DebugLogger.Log("Player Died!");
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
         

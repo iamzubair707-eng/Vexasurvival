@@ -37,7 +37,7 @@ public class ShopManager : MonoBehaviour
         
         if (item == null)
         {
-            Debug.Log("Item not found!");
+            DebugLogger.Log("Item not found!");
             return false;
         }
         
@@ -46,14 +46,14 @@ public class ShopManager : MonoBehaviour
         
         if (!canBuy)
         {
-            Debug.Log($"Not enough {item.currencyType}!");
+            DebugLogger.Log($"Not enough {item.currencyType}!");
             return false;
         }
         
         // Apply item effect
         ApplyItemEffect(item);
         
-        Debug.Log($"🛒 Purchased: {item.name} for {item.cost} {item.currencyType}");
+        DebugLogger.Log($"🛒 Purchased: {item.name} for {item.cost} {item.currencyType}");
         
         // Show notification
         NotificationManager notif = GetComponent<NotificationManager>();
@@ -70,12 +70,12 @@ public class ShopManager : MonoBehaviour
         switch (item.effectType)
         {
             case "speed":
-                Debug.Log($"⚡ Speed boost active for {item.effectValue} seconds!");
+                DebugLogger.Log($"⚡ Speed boost active for {item.effectValue} seconds!");
                 // Implement speed boost logic
                 break;
                 
             case "shield":
-                Debug.Log($"🛡️ Shield active for {item.effectValue} seconds!");
+                DebugLogger.Log($"🛡️ Shield active for {item.effectValue} seconds!");
                 PlayerPrefs.SetInt("ShieldActive", 1);
                 PlayerPrefs.SetFloat("ShieldEndTime", Time.time + item.effectValue);
                 break;
@@ -83,67 +83,67 @@ public class ShopManager : MonoBehaviour
             case "resources":
                 resourceManager.AddResource("wood", 100);
                 resourceManager.AddResource("stone", 50);
-                Debug.Log("📦 +100 Wood, +50 Stone!");
+                DebugLogger.Log("📦 +100 Wood, +50 Stone!");
                 break;
                 
             case "heal":
                 HealthSystem hs = GetComponent<HealthSystem>();
                 if (hs != null) hs.Heal(100);
-                Debug.Log("💚 Health fully restored!");
+                DebugLogger.Log("💚 Health fully restored!");
                 break;
                 
             case "blueprint":
-                Debug.Log("📜 Rare blueprint unlocked!");
+                DebugLogger.Log("📜 Rare blueprint unlocked!");
                 PlayerPrefs.SetInt("HasRareBlueprint", 1);
                 break;
                 
             case "convert_stone":
                 resourceManager.AddResource("stone", (int)item.effectValue);
-                Debug.Log($"🔄 Converted! +{item.effectValue} Stone");
+                DebugLogger.Log($"🔄 Converted! +{item.effectValue} Stone");
                 break;
                 
             case "convert_food":
                 resourceManager.AddResource("food", (int)item.effectValue);
-                Debug.Log($"🔄 Converted! +{item.effectValue} Food");
+                DebugLogger.Log($"🔄 Converted! +{item.effectValue} Food");
                 break;
                 
             case "convert_wood":
                 resourceManager.AddResource("wood", (int)item.effectValue);
-                Debug.Log($"🔄 Converted! +{item.effectValue} Wood");
+                DebugLogger.Log($"🔄 Converted! +{item.effectValue} Wood");
                 break;
         }
     }
     
     public void ShowShop()
     {
-        Debug.Log("========== SHOP ==========");
-        Debug.Log("--- VEXA ITEMS ---");
+        DebugLogger.Log("========== SHOP ==========");
+        DebugLogger.Log("--- VEXA ITEMS ---");
         foreach (ShopItem item in shopItems)
         {
             if (item.currencyType == "vexa")
             {
-                Debug.Log($"{item.id}: {item.name} - {item.cost} VEXA");
+                DebugLogger.Log($"{item.id}: {item.name} - {item.cost} VEXA");
             }
         }
         
-        Debug.Log("--- WOOD ITEMS ---");
+        DebugLogger.Log("--- WOOD ITEMS ---");
         foreach (ShopItem item in shopItems)
         {
             if (item.currencyType == "wood")
             {
-                Debug.Log($"{item.id}: {item.name} - {item.cost} Wood");
+                DebugLogger.Log($"{item.id}: {item.name} - {item.cost} Wood");
             }
         }
         
-        Debug.Log("--- STONE ITEMS ---");
+        DebugLogger.Log("--- STONE ITEMS ---");
         foreach (ShopItem item in shopItems)
         {
             if (item.currencyType == "stone")
             {
-                Debug.Log($"{item.id}: {item.name} - {item.cost} Stone");
+                DebugLogger.Log($"{item.id}: {item.name} - {item.cost} Stone");
             }
         }
-        Debug.Log("==================");
+        DebugLogger.Log("==================");
     }
     
     public bool IsShieldActive()

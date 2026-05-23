@@ -50,12 +50,12 @@ public class PrivacyPolicy : MonoBehaviour
     {
         PlayerPrefs.SetInt("PrivacyAccepted", 1);
         privacyPanel.SetActive(false);
-        Debug.Log("✅ Privacy policy accepted");
+        DebugLogger.Log("✅ Privacy policy accepted");
     }
     
     void DeclinePrivacy()
     {
-        Debug.Log("❌ Privacy policy declined. Game will not save data.");
+        DebugLogger.Log("❌ Privacy policy declined. Game will not save data.");
         privacyPanel.SetActive(false);
         // Optional: Disable all save features
         PlayerPrefs.SetInt("PrivacyAccepted", 0);

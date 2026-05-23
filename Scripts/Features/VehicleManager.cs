@@ -78,7 +78,7 @@ public class VehicleManager : MonoBehaviour
         if (resources.SpendResource("scrap", vehicle.scrapCost))
         {
             vehicle.isOwned = true;
-            Debug.Log($"🚗 Purchased {vehicleName}!");
+            DebugLogger.Log($"🚗 Purchased {vehicleName}!");
             return true;
         }
         return false;
@@ -91,7 +91,7 @@ public class VehicleManager : MonoBehaviour
             v.isEquipped = (v.vehicleName == vehicleName && v.isOwned);
         }
         activeVehicle = availableVehicles.Find(v => v.isEquipped);
-        Debug.Log($"🔧 Equipped: {activeVehicle?.vehicleName}");
+        DebugLogger.Log($"🔧 Equipped: {activeVehicle?.vehicleName}");
     }
     
     public bool ConsumeFuel(float amount)
@@ -102,7 +102,7 @@ public class VehicleManager : MonoBehaviour
             SaveFuelData();
             return true;
         }
-        Debug.Log("⛽ Out of fuel! Refuel at base!");
+        DebugLogger.Log("⛽ Out of fuel! Refuel at base!");
         return false;
     }
     
@@ -110,7 +110,7 @@ public class VehicleManager : MonoBehaviour
     {
         globalFuel = Mathf.Min(globalFuel + amount, maxFuel);
         SaveFuelData();
-        Debug.Log($"⛽ Refueled! Current fuel: {globalFuel}/{maxFuel}");
+        DebugLogger.Log($"⛽ Refueled! Current fuel: {globalFuel}/{maxFuel}");
     }
     
     void SaveFuelData() => PlayerPrefs.SetFloat("GlobalFuel", globalFuel);

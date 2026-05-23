@@ -86,7 +86,7 @@ public class ResourceManager : MonoBehaviour
                 }
                 break;
         }
-        Debug.Log($"Not enough {type}!");
+        DebugLogger.Log($"Not enough {type}!");
         return false;
     }
     
@@ -98,7 +98,7 @@ public class ResourceManager : MonoBehaviour
         food += 4;
         UpdateUI();
         SaveResources();
-        Debug.Log("Passive resources generated!");
+        DebugLogger.Log("Passive resources generated!");
     }
     
     void UpdateUI()

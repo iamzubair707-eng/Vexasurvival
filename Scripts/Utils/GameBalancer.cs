@@ -60,7 +60,7 @@ public class GameBalancer : MonoBehaviour
             currentBalance.resourceGainMultiplier = 0.8f;
         }
         
-        Debug.Log($"⚖️ Difficulty adjusted for level {playerLevel}");
+        DebugLogger.Log($"⚖️ Difficulty adjusted for level {playerLevel}");
         SaveBalanceSettings();
     }
     

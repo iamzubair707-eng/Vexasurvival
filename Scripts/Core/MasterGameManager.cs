@@ -43,7 +43,7 @@ public class MasterGameManager : MonoBehaviour
     
     void InitializeAllSystems()
     {
-        Debug.Log("🚀 Initializing VEXA SURVIVAL - Master Game Manager");
+        DebugLogger.Log("🚀 Initializing VEXA SURVIVAL - Master Game Manager");
         
         // Find or create systems
         if (resources == null) resources = FindObjectOfType<CoreResources>();
@@ -60,7 +60,7 @@ public class MasterGameManager : MonoBehaviour
         isGameReady = true;
         
         StartCoroutine(DelayedStart());
-        Debug.Log("✅ All systems initialized! Total Systems: " + CountActiveSystems());
+        DebugLogger.Log("✅ All systems initialized! Total Systems: " + CountActiveSystems());
     }
     
     IEnumerator DelayedStart()
@@ -80,7 +80,7 @@ public class MasterGameManager : MonoBehaviour
         CheckOfflineRewards();
         
         UpdateAllUI();
-        Debug.Log("🎮 Game Ready! Start playing!");
+        DebugLogger.Log("🎮 Game Ready! Start playing!");
     }
     
     // ==================== CORE LOOP METHODS ====================
@@ -109,7 +109,7 @@ public class MasterGameManager : MonoBehaviour
         tutorialSystem?.CheckAction("gather");
         
         UpdateResourceUI();
-        Debug.Log($"📦 Gathered {amount} {type}!");
+        DebugLogger.Log($"📦 Gathered {amount} {type}!");
     }
     
     public void UpgradeBuilding()
@@ -130,7 +130,7 @@ public class MasterGameManager : MonoBehaviour
             tutorialSystem?.CheckAction("upgrade");
             
             UpdateBuildingUI();
-            Debug.Log($"Building upgraded to level {buildingLevel}!");
+            DebugLogger.Log($"Building upgraded to level {buildingLevel}!");
         }
         else
         {
@@ -154,7 +154,7 @@ public class MasterGameManager : MonoBehaviour
             tutorialSystem?.CheckAction("train");
             
             UpdateTroopUI();
-            Debug.Log($"Troop trained! Now have {troopCount} troops.");
+            DebugLogger.Log($"Troop trained! Now have {troopCount} troops.");
         }
         else
         {
@@ -174,7 +174,7 @@ public class MasterGameManager : MonoBehaviour
         
         if (pveRaid == null)
         {
-            Debug.LogError("PVERaidSystem not found!");
+            DebugLogger.LogError("PVERaidSystem not found!");
             return;
         }
         
@@ -222,7 +222,7 @@ public class MasterGameManager : MonoBehaviour
         }
         
         UpdateAllUI();
-        Debug.Log($"Raid completed! Victory: {result?.isVictory ?? false}");
+        DebugLogger.Log($"Raid completed! Victory: {result?.isVictory ?? false}");
     }
     
     public void OpenChest()
@@ -231,7 +231,7 @@ public class MasterGameManager : MonoBehaviour
         
         if (chestSystem == null)
         {
-            Debug.LogError("ChestSystem not found!");
+            DebugLogger.LogError("ChestSystem not found!");
             return;
         }
         
@@ -258,7 +258,7 @@ public class MasterGameManager : MonoBehaviour
             tutorialSystem?.CheckAction("chest");
             
             UpdateAllUI();
-            Debug.Log($"Chest opened! Got {reward.amount} {reward.rewardType}!");
+            DebugLogger.Log($"Chest opened! Got {reward.amount} {reward.rewardType}!");
         }
         else
         {

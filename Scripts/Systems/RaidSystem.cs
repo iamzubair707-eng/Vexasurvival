@@ -22,11 +22,11 @@ public class RaidSystem : MonoBehaviour
     {
         if (!canRaid)
         {
-            Debug.Log($"Raid on cooldown! Wait {raidCooldown} seconds");
+            DebugLogger.Log($"Raid on cooldown! Wait {raidCooldown} seconds");
             return;
         }
         
-        Debug.Log($"🔥 Raiding player: {targetPlayerId}");
+        DebugLogger.Log($"🔥 Raiding player: {targetPlayerId}");
         
         // Simulate raid battle
         int playerPower = CalculatePlayerPower();
@@ -38,7 +38,7 @@ public class RaidSystem : MonoBehaviour
             resourceManager.AddResource("wood", lootAmount);
             resourceManager.AddResource("stone", lootAmount / 2);
             resourceManager.AddResource("vexa", lootAmount / 10);
-            Debug.Log($"✅ Raid WON! Loot: {lootAmount} wood, {lootAmount/2} stone");
+            DebugLogger.Log($"✅ Raid WON! Loot: {lootAmount} wood, {lootAmount/2} stone");
             
             // Add to leaderboard
             AddRaidWin();
@@ -48,7 +48,7 @@ public class RaidSystem : MonoBehaviour
             // Lose raid - get damage
             int damage = Random.Range(20, 60);
             healthSystem.TakeDamage(damage);
-            Debug.Log($"❌ Raid LOST! Took {damage} damage");
+            DebugLogger.Log($"❌ Raid LOST! Took {damage} damage");
         }
         
         StartCoroutine(RaidCooldown());
@@ -78,6 +78,6 @@ public class RaidSystem : MonoBehaviour
         canRaid = false;
         yield return new WaitForSeconds(raidCooldown);
         canRaid = true;
-        Debug.Log("⚔️ Raid ready again!");
+        DebugLogger.Log("⚔️ Raid ready again!");
     }
 }

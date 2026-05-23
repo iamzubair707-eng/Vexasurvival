@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         
         if (joystick == null)
-            Debug.LogWarning("Joystick not assigned! Using keyboard controls.");
+            DebugLogger.LogWarning("Joystick not assigned! Using keyboard controls.");
     }
     
     void Update()

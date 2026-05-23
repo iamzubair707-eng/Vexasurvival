@@ -39,12 +39,12 @@ public class Leaderboard : MonoBehaviour
     
     void DisplayLeaderboard()
     {
-        Debug.Log("========== LEADERBOARD ==========");
+        DebugLogger.Log("========== LEADERBOARD ==========");
         for (int i = 0; i < Mathf.Min(10, topPlayers.Count); i++)
         {
-            Debug.Log($"{i+1}. {topPlayers[i].playerName} - {topPlayers[i].vexaAmount} VEXA");
+            DebugLogger.Log($"{i+1}. {topPlayers[i].playerName} - {topPlayers[i].vexaAmount} VEXA");
         }
-        Debug.Log("=================================");
+        DebugLogger.Log("=================================");
     }
     
     void SaveScores()

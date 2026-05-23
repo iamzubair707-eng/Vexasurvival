@@ -59,7 +59,7 @@ public class MentalHealthSystem : MonoBehaviour
             mentalHealth += evt.mentalHealthImpact;
             mentalHealth = Mathf.Clamp(mentalHealth, 0, maxMentalHealth);
             
-            Debug.Log($"🧠 {evt.description} Mental Health: {mentalHealth:F0}/100");
+            DebugLogger.Log($"🧠 {evt.description} Mental Health: {mentalHealth:F0}/100");
             
             // Check for trauma state
             if (mentalHealth < 30 && currentTrauma == TraumaState.None)
@@ -84,16 +84,16 @@ public class MentalHealthSystem : MonoBehaviour
         switch (currentTrauma)
         {
             case TraumaState.Depression:
-                Debug.Log("😔 Depression: Resource production reduced by 50%");
+                DebugLogger.Log("😔 Depression: Resource production reduced by 50%");
                 break;
             case TraumaState.PTSD:
-                Debug.Log("😨 PTSD: Survivors panic randomly!");
+                DebugLogger.Log("😨 PTSD: Survivors panic randomly!");
                 break;
             case TraumaState.Aggression:
-                Debug.Log("😤 Aggression: +30% raid damage, -50% defense!");
+                DebugLogger.Log("😤 Aggression: +30% raid damage, -50% defense!");
                 break;
             case TraumaState.Paranoia:
-                Debug.Log("👀 Paranoia: Seeing fake attacks!");
+                DebugLogger.Log("👀 Paranoia: Seeing fake attacks!");
                 break;
         }
     }
@@ -101,7 +101,7 @@ public class MentalHealthSystem : MonoBehaviour
     void HealTrauma()
     {
         currentTrauma = TraumaState.None;
-        Debug.Log("💚 Trauma healed! Mental health restored.");
+        DebugLogger.Log("💚 Trauma healed! Mental health restored.");
         SendNotification("💚 Healing Complete!", "Survivors are recovering.");
     }
     
@@ -112,7 +112,7 @@ public class MentalHealthSystem : MonoBehaviour
         {
             mentalHealth += 20f;
             mentalHealth = Mathf.Min(mentalHealth, maxMentalHealth);
-            Debug.Log($"🎮 Therapy session complete! Mental health improved.");
+            DebugLogger.Log($"🎮 Therapy session complete! Mental health improved.");
         }
     }
     
@@ -121,7 +121,7 @@ public class MentalHealthSystem : MonoBehaviour
         if (currentTrauma != TraumaState.None)
         {
             mentalHealth -= 5f;
-            Debug.Log($"⚠️ Mental health decaying: {mentalHealth:F0}/100");
+            DebugLogger.Log($"⚠️ Mental health decaying: {mentalHealth:F0}/100");
         }
     }
     

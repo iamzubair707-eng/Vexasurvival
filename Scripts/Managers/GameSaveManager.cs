@@ -23,12 +23,12 @@ public class GameSaveManager : MonoBehaviour
     {
         PlayerPrefs.SetInt("LastSaveTime", (int)System.DateTime.Now.Ticks);
         PlayerPrefs.Save();
-        Debug.Log("💾 Game Saved!");
+        DebugLogger.Log("💾 Game Saved!");
     }
     
     public void LoadAllData()
     {
-        Debug.Log("📀 Loading Game Data...");
+        DebugLogger.Log("📀 Loading Game Data...");
         // All individual systems load their own data via PlayerPrefs
         // This just ensures everything is ready
     }
@@ -51,7 +51,7 @@ public class GameSaveManager : MonoBehaviour
             healthSystem.Heal(100);
         }
         
-        Debug.Log("🆕 New Game Started!");
+        DebugLogger.Log("🆕 New Game Started!");
         SaveAllData();
     }
     
@@ -66,7 +66,7 @@ public class GameSaveManager : MonoBehaviour
             health = healthSystem != null ? healthSystem.maxHealth : 100
         });
         
-        Debug.Log("📤 Save Data: " + saveData);
+        DebugLogger.Log("📤 Save Data: " + saveData);
         PlayerPrefs.SetString("ExportData", saveData);
     }
 }

@@ -33,7 +33,7 @@ public class PerformanceOptimizer : MonoBehaviour
             maxFPS = 30;
             lodDistance = 20f;
             cullDistance = 40f;
-            Debug.Log("📱 Low-end device detected! Applying performance settings.");
+            DebugLogger.Log("📱 Low-end device detected! Applying performance settings.");
         }
         else
         {
@@ -41,7 +41,7 @@ public class PerformanceOptimizer : MonoBehaviour
             enableShadows = false; // Keep false for mobile
             maxParticles = 50;
             maxFPS = 60;
-            Debug.Log("📱 High-end device detected!");
+            DebugLogger.Log("📱 High-end device detected!");
         }
         #endif
     }
@@ -72,7 +72,7 @@ public class PerformanceOptimizer : MonoBehaviour
         // Garbage collection
         InvokeRepeating("CleanMemory", 60f, 60f);
         
-        Debug.Log($"⚡ Performance optimized for mobile: {maxFPS} FPS, Shadows: {enableShadows}");
+        DebugLogger.Log($"⚡ Performance optimized for mobile: {maxFPS} FPS, Shadows: {enableShadows}");
     }
     
     void CleanMemory()

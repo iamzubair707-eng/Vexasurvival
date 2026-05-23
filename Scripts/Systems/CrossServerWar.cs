@@ -17,8 +17,8 @@ public class CrossServerWar : MonoBehaviour
             warEndTime = DateTime.Now.AddDays(3);
             warPoints = 0;
             
-            Debug.Log($"⚔️ CROSS-SERVER WAR DECLARED on {serverName}!");
-            Debug.Log($"⏰ War ends in 3 days");
+            DebugLogger.Log($"⚔️ CROSS-SERVER WAR DECLARED on {serverName}!");
+            DebugLogger.Log($"⏰ War ends in 3 days");
             
             SendNotification("⚔️ CROSS-SERVER WAR!", $"Attack {serverName} for glory!");
         }
@@ -29,7 +29,7 @@ public class CrossServerWar : MonoBehaviour
         if (isWarActive)
         {
             warPoints += points;
-            Debug.Log($"🏆 War contribution: {warPoints} points");
+            DebugLogger.Log($"🏆 War contribution: {warPoints} points");
             
             if (warPoints >= 1000)
             {
@@ -42,14 +42,14 @@ public class CrossServerWar : MonoBehaviour
     {
         if (victory)
         {
-            Debug.Log("🏆 CROSS-SERVER WAR VICTORY!");
+            DebugLogger.Log("🏆 CROSS-SERVER WAR VICTORY!");
             // Give all players rewards
             CurrencyManager currency = GetComponent<CurrencyManager>();
             currency.AddGems(500);
         }
         else
         {
-            Debug.Log("💀 Cross-server war lost...");
+            DebugLogger.Log("💀 Cross-server war lost...");
         }
         
         isWarActive = false;

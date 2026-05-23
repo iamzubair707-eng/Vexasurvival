@@ -39,19 +39,19 @@ public class RelationshipManager : MonoBehaviour
         {
             case "gift":
                 s.relationshipValue += 15;
-                Debug.Log($"🎁 Gave gift to {survivorName}! +15 relationship");
+                DebugLogger.Log($"🎁 Gave gift to {survivorName}! +15 relationship");
                 break;
             case "praise":
                 s.relationshipValue += 10;
-                Debug.Log($"😊 Praised {survivorName}! +10 relationship");
+                DebugLogger.Log($"😊 Praised {survivorName}! +10 relationship");
                 break;
             case "insult":
                 s.relationshipValue -= 20;
-                Debug.Log($"😠 Insulted {survivorName}! -20 relationship");
+                DebugLogger.Log($"😠 Insulted {survivorName}! -20 relationship");
                 break;
             case "betray":
                 s.relationshipValue -= 50;
-                Debug.Log($"💔 Betrayed {survivorName}! -50 relationship");
+                DebugLogger.Log($"💔 Betrayed {survivorName}! -50 relationship");
                 TriggerBetrayal(s);
                 break;
         }
@@ -82,18 +82,18 @@ public class RelationshipManager : MonoBehaviour
         {
             case Survivor.RelationshipStatus.Love:
                 s.productionBonus = 0.5f;
-                Debug.Log($"💕 {s.name} is in love! +50% production!");
+                DebugLogger.Log($"💕 {s.name} is in love! +50% production!");
                 break;
             case Survivor.RelationshipStatus.Friend:
                 s.productionBonus = 0.2f;
                 break;
             case Survivor.RelationshipStatus.Rival:
                 s.productionBonus = -0.3f;
-                Debug.Log($"⚔️ {s.name} is your rival! -30% production!");
+                DebugLogger.Log($"⚔️ {s.name} is your rival! -30% production!");
                 break;
             case Survivor.RelationshipStatus.Enemy:
                 s.productionBonus = -0.5f;
-                Debug.Log($"💀 {s.name} is your enemy! -50% production!");
+                DebugLogger.Log($"💀 {s.name} is your enemy! -50% production!");
                 break;
         }
     }
@@ -103,7 +103,7 @@ public class RelationshipManager : MonoBehaviour
         CoreResources resources = GetComponent<CoreResources>();
         int stolenAmount = Random.Range(20, 50);
         resources.SpendResource("scrap", stolenAmount);
-        Debug.Log($"⚠️ {s.name} stole {stolenAmount} scrap as revenge!");
+        DebugLogger.Log($"⚠️ {s.name} stole {stolenAmount} scrap as revenge!");
     }
     
     void SaveRelationships()

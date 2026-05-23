@@ -8,7 +8,7 @@ public class SimpleSceneSetup : MonoBehaviour
         CreateSimpleUI();
         CreatePlayer();
         CreateGround();
-        Debug.Log("✅ Scene Setup Complete! Use F12 for diagnostic.");
+        DebugLogger.Log("✅ Scene Setup Complete! Use F12 for diagnostic.");
     }
     
     void CreateSimpleUI()
@@ -64,7 +64,7 @@ public class SimpleSceneSetup : MonoBehaviour
             // Add camera follow
             Camera.main.transform.position = new Vector3(0, 0, -10);
             
-            Debug.Log("✅ Player created at position 0,0");
+            DebugLogger.Log("✅ Player created at position 0,0");
         }
     }
     
@@ -85,7 +85,7 @@ public class SimpleSceneSetup : MonoBehaviour
                 renderer.material.color = new Color(0.4f, 0.3f, 0.2f); // Brown ground
             }
             
-            Debug.Log("✅ Ground created");
+            DebugLogger.Log("✅ Ground created");
         }
     }
 }

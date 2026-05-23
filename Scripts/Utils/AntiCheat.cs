@@ -43,11 +43,11 @@ public class AntiCheat : MonoBehaviour
         if (realDeltaTime > 0.2f && deltaTime < 0.01f)
         {
             speedHackWarnings++;
-            Debug.LogWarning($"⚠️ Possible speed hack detected! Warning {speedHackWarnings}/3");
+            DebugLogger.LogWarning($"⚠️ Possible speed hack detected! Warning {speedHackWarnings}/3");
             
             if (speedHackWarnings >= 3)
             {
-                Debug.LogError("🔒 ANTI-CHEAT: Speed hack detected! Applying penalty.");
+                DebugLogger.LogError("🔒 ANTI-CHEAT: Speed hack detected! Applying penalty.");
                 ApplyPenalty();
             }
         }
@@ -60,14 +60,14 @@ public class AntiCheat : MonoBehaviour
         // Check for impossible resource amounts
         if (currentCoins > 999999 || currentGems > 99999)
         {
-            Debug.LogError("🔒 ANTI-CHEAT: Impossible resource amount detected!");
+            DebugLogger.LogError("🔒 ANTI-CHEAT: Impossible resource amount detected!");
             ApplyPenalty();
         }
         
         // Check for negative values
         if (currentCoins < 0 || currentGems < 0)
         {
-            Debug.LogError("🔒 ANTI-CHEAT: Negative resources detected!");
+            DebugLogger.LogError("🔒 ANTI-CHEAT: Negative resources detected!");
             ResetToSafeValues();
         }
     }
@@ -77,7 +77,7 @@ public class AntiCheat : MonoBehaviour
         // Prevent impossible transactions
         if (amount > 10000)
         {
-            Debug.LogWarning($"⚠️ Suspicious transaction: {amount} {type}");
+            DebugLogger.LogWarning($"⚠️ Suspicious transaction: {amount} {type}");
             return false;
         }
         return true;
@@ -90,7 +90,7 @@ public class AntiCheat : MonoBehaviour
         {
             currency.coins = Mathf.FloorToInt(currency.coins * 0.5f);
             currency.gems = Mathf.FloorToInt(currency.gems * 0.5f);
-            Debug.Log("⚠️ Penalty applied: Resources reduced by 50%");
+            DebugLogger.Log("⚠️ Penalty applied: Resources reduced by 50%");
         }
         
         // Add cooldown period

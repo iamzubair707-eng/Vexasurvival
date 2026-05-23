@@ -51,7 +51,7 @@ public class GameDiagnostic : MonoBehaviour
         report.AppendLine("═══════════════════════════════════════");
         report.AppendLine("✅ DIAGNOSTIC COMPLETE");
         
-        Debug.Log(report.ToString());
+        DebugLogger.Log(report.ToString());
         
         // Save to file
         SaveReportToFile();
@@ -59,14 +59,14 @@ public class GameDiagnostic : MonoBehaviour
     
     void QuickStatus()
     {
-        Debug.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Debug.Log("⚡ QUICK STATUS");
-        Debug.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Debug.Log($"🎯 Total Systems: {CountActiveSystems()}");
-        Debug.Log($"✅ Active Features: {CountWorkingFeatures()}");
-        Debug.Log($"⚠️ Warnings: {CountWarnings()}");
-        Debug.Log($"💾 Save Data: {(SaveFileExists() ? "✅ YES" : "❌ NO")}");
-        Debug.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("⚡ QUICK STATUS");
+        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"🎯 Total Systems: {CountActiveSystems()}");
+        DebugLogger.Log($"✅ Active Features: {CountWorkingFeatures()}");
+        DebugLogger.Log($"⚠️ Warnings: {CountWarnings()}");
+        DebugLogger.Log($"💾 Save Data: {(SaveFileExists() ? "✅ YES" : "❌ NO")}");
+        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     }
     
     void CheckCoreSystems()
@@ -273,7 +273,7 @@ public class GameDiagnostic : MonoBehaviour
     {
         string path = Application.persistentDataPath + "/diagnostic_report.txt";
         System.IO.File.WriteAllText(path, report.ToString());
-        Debug.Log($"📄 Report saved to: {path}");
+        DebugLogger.Log($"📄 Report saved to: {path}");
     }
     
     // GUI for on-screen diagnostic

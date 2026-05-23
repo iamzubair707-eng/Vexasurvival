@@ -74,7 +74,7 @@ public class EventManager : MonoBehaviour
         if (notificationManager != null)
             notificationManager.ShowNotification(msg, "urgent");
         
-        Debug.Log("🎉 DOUBLE REWARDS EVENT STARTED! (30 minutes)");
+        DebugLogger.Log("🎉 DOUBLE REWARDS EVENT STARTED! (30 minutes)");
         
         PlayerPrefs.SetInt("DoubleReward", 1);
         PlayerPrefs.SetFloat("EventEndTime", eventEndTime);
@@ -90,7 +90,7 @@ public class EventManager : MonoBehaviour
         if (notificationManager != null)
             notificationManager.ShowNotification(msg, "warning");
         
-        Debug.Log("⚔️ HALF RAID COOLDOWN EVENT STARTED! (30 minutes)");
+        DebugLogger.Log("⚔️ HALF RAID COOLDOWN EVENT STARTED! (30 minutes)");
         
         PlayerPrefs.SetInt("HalfRaidCooldown", 1);
         PlayerPrefs.SetFloat("EventEndTime", eventEndTime);
@@ -106,7 +106,7 @@ public class EventManager : MonoBehaviour
         if (notificationManager != null)
             notificationManager.ShowNotification(msg, "success");
         
-        Debug.Log("💰 DISCOUNT EVENT STARTED! (30 minutes)");
+        DebugLogger.Log("💰 DISCOUNT EVENT STARTED! (30 minutes)");
         
         PlayerPrefs.SetInt("Discount", 1);
         PlayerPrefs.SetFloat("EventEndTime", eventEndTime);
@@ -127,7 +127,7 @@ public class EventManager : MonoBehaviour
         if (notificationManager != null)
             notificationManager.ShowNotification("⏰ Events have ended! Wait for next one!", "info");
         
-        Debug.Log("All events ended!");
+        DebugLogger.Log("All events ended!");
     }
     
     public int GetDiscountedPrice(int originalPrice)

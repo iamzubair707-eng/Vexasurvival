@@ -18,7 +18,7 @@ public class PVERaidSystem : MonoBehaviour
     {
         if (raidEnergy <= 0)
         {
-            Debug.Log("❌ No raid energy left! Wait 30 minutes.");
+            DebugLogger.Log("❌ No raid energy left! Wait 30 minutes.");
             return;
         }
         
@@ -29,7 +29,7 @@ public class PVERaidSystem : MonoBehaviour
     
     IEnumerator ExecuteRaid(RaidType type)
     {
-        Debug.Log($"⚔️ Starting {type} raid...");
+        DebugLogger.Log($"⚔️ Starting {type} raid...");
         yield return new WaitForSeconds(2f);
         
         CoreResources resources = GetComponent<CoreResources>();
@@ -41,21 +41,21 @@ public class PVERaidSystem : MonoBehaviour
             case RaidType.ZombieHorde:
                 rewardAmount = Random.Range(20, 50);
                 resources.AddResource("scrap", rewardAmount);
-                Debug.Log($"🧟 Zombies defeated! +{rewardAmount} Scrap!");
+                DebugLogger.Log($"🧟 Zombies defeated! +{rewardAmount} Scrap!");
                 break;
                 
             case RaidType.ScavengeRuins:
                 rewardAmount = Random.Range(30, 80);
                 resources.AddResource("food", rewardAmount / 2);
                 resources.AddResource("water", rewardAmount / 2);
-                Debug.Log($"🏚️ Ruins scavenged! +{rewardAmount/2} Food, +{rewardAmount/2} Water!");
+                DebugLogger.Log($"🏚️ Ruins scavenged! +{rewardAmount/2} Food, +{rewardAmount/2} Water!");
                 break;
                 
             case RaidType.BanditCamp:
                 rewardAmount = Random.Range(10, 30);
                 resources.AddResource("fuel", rewardAmount);
                 currency.AddCoins(rewardAmount * 5);
-                Debug.Log($"💰 Bandits defeated! +{rewardAmount} Fuel, +{rewardAmount*5} Coins!");
+                DebugLogger.Log($"💰 Bandits defeated! +{rewardAmount} Fuel, +{rewardAmount*5} Coins!");
                 break;
         }
         
@@ -70,7 +70,7 @@ public class PVERaidSystem : MonoBehaviour
         if (raidEnergy < maxRaidEnergy)
         {
             raidEnergy++;
-            Debug.Log($"⚡ Raid energy regenerated! Now: {raidEnergy}/{maxRaidEnergy}");
+            DebugLogger.Log($"⚡ Raid energy regenerated! Now: {raidEnergy}/{maxRaidEnergy}");
         }
     }
     

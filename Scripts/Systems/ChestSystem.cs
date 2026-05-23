@@ -43,7 +43,7 @@ public class ChestSystem : MonoBehaviour
             chestCount++;
             SaveChestData();
             SendMobileNotification("🎁 Chest Ready!", "Your free chest is waiting! Claim now!");
-            Debug.Log("🎁 New chest available!");
+            DebugLogger.Log("🎁 New chest available!");
         }
     }
     
@@ -51,7 +51,7 @@ public class ChestSystem : MonoBehaviour
     {
         if (chestCount <= 0)
         {
-            Debug.Log("No chests available!");
+            DebugLogger.Log("No chests available!");
             return null;
         }
         
@@ -67,7 +67,7 @@ public class ChestSystem : MonoBehaviour
         SaveChestData();
         SendMobileNotification("🎁 New Chest Incoming", "Next chest will be ready in 3 hours!");
         
-        Debug.Log($"🎁 Chest opened! Got: {reward.rewardType} x{reward.amount}");
+        DebugLogger.Log($"🎁 Chest opened! Got: {reward.rewardType} x{reward.amount}");
         return reward;
     }
     
@@ -115,7 +115,7 @@ public class ChestSystem : MonoBehaviour
         string[] costumes = { "Warrior Skin", "Shadow Cloak", "Golden Armor", "Ancient Robe" };
         string costume = costumes[UnityEngine.Random.Range(0, costumes.Length)];
         PlayerPrefs.SetInt($"Costume_{costume}", 1);
-        Debug.Log($"👔 New Costume Unlocked: {costume}!");
+        DebugLogger.Log($"👔 New Costume Unlocked: {costume}!");
     }
     
     void UnlockSlave()
@@ -123,7 +123,7 @@ public class ChestSystem : MonoBehaviour
         string[] slaves = { "Wood Gatherer", "Stone Miner", "Food Harvester", "Defense Guard" };
         string slave = slaves[UnityEngine.Random.Range(0, slaves.Length)];
         PlayerPrefs.SetInt($"Slave_{slave}", PlayerPrefs.GetInt($"Slave_{slave}", 0) + 1);
-        Debug.Log($"👥 New Worker Unlocked: {slave}!");
+        DebugLogger.Log($"👥 New Worker Unlocked: {slave}!");
     }
     
     void UnlockSpecialItem()
@@ -131,16 +131,16 @@ public class ChestSystem : MonoBehaviour
         string[] specials = { "Dragon Pet", "Magic Amulet", "Infinite Shield", "Double Damage" };
         string special = specials[UnityEngine.Random.Range(0, specials.Length)];
         PlayerPrefs.SetInt($"Special_{special}", 1);
-        Debug.Log($"✨ SPECIAL ITEM: {special}!");
+        DebugLogger.Log($"✨ SPECIAL ITEM: {special}!");
     }
     
     public void ShowChestStatus()
     {
-        Debug.Log($"🎁 Chests Available: {chestCount}");
+        DebugLogger.Log($"🎁 Chests Available: {chestCount}");
         if (!isChestReady)
         {
             TimeSpan remaining = nextChestTime - DateTime.Now;
-            Debug.Log($"⏰ Next chest in: {remaining.Hours}h {remaining.Minutes}m");
+            DebugLogger.Log($"⏰ Next chest in: {remaining.Hours}h {remaining.Minutes}m");
         }
     }
     
@@ -148,7 +148,7 @@ public class ChestSystem : MonoBehaviour
     {
         #if UNITY_ANDROID || UNITY_IOS
         // Mobile notification (will work when on actual device)
-        Debug.Log($"📱 NOTIFICATION: {title} - {message}");
+        DebugLogger.Log($"📱 NOTIFICATION: {title} - {message}");
         #endif
     }
     

@@ -50,11 +50,11 @@ public class DataManager : MonoBehaviour
             
             string json = JsonUtility.ToJson(currentData, true);
             File.WriteAllText(savePath, json);
-            Debug.Log($"💾 Game saved at {currentData.lastSaveTime}");
+            DebugLogger.Log($"💾 Game saved at {currentData.lastSaveTime}");
         }
         catch (Exception e)
         {
-            Debug.LogError($"Save failed: {e.Message}");
+            DebugLogger.LogError($"Save failed: {e.Message}");
         }
     }
     
@@ -67,17 +67,17 @@ public class DataManager : MonoBehaviour
                 string json = File.ReadAllText(savePath);
                 currentData = JsonUtility.FromJson<GameData>(json);
                 ApplyDataToSystems();
-                Debug.Log($"💾 Game loaded from {currentData.lastSaveTime}");
+                DebugLogger.Log($"💾 Game loaded from {currentData.lastSaveTime}");
             }
             else
             {
-                Debug.Log("No save file found. Starting new game.");
+                DebugLogger.Log("No save file found. Starting new game.");
                 NewGame();
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"Load failed: {e.Message}");
+            DebugLogger.LogError($"Load failed: {e.Message}");
             NewGame();
         }
     }
@@ -97,7 +97,7 @@ public class DataManager : MonoBehaviour
         
         ApplyDataToSystems();
         SaveGame();
-        Debug.Log("🆕 New game started!");
+        DebugLogger.Log("🆕 New game started!");
     }
     
     void UpdateDataFromSystems()

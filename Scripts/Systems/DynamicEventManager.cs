@@ -114,8 +114,8 @@ public class DynamicEventManager : MonoBehaviour
         currentEvent = newEvent;
         globalEventMultiplier = currentEvent.resourceMultiplier;
         
-        Debug.Log($"🌍 {currentEvent.eventName} started!");
-        Debug.Log($"📝 {currentEvent.description}");
+        DebugLogger.Log($"🌍 {currentEvent.eventName} started!");
+        DebugLogger.Log($"📝 {currentEvent.description}");
         
         NotificationManager notif = GetComponent<NotificationManager>();
         notif?.ShowNotification($"🌍 {currentEvent.eventName}!", currentEvent.description, "urgent");
@@ -126,7 +126,7 @@ public class DynamicEventManager : MonoBehaviour
     
     void EndCurrentEvent()
     {
-        Debug.Log($"✅ Event ended: {currentEvent.eventName}");
+        DebugLogger.Log($"✅ Event ended: {currentEvent.eventName}");
         globalEventMultiplier = 1f;
         currentEvent = null;
         SaveEventData();

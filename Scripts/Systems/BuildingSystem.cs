@@ -12,7 +12,7 @@ public class BuildingSystem : MonoBehaviour
     {
         if (currentLevel >= maxLevel)
         {
-            Debug.Log("Maximum level reached!");
+            DebugLogger.Log("Maximum level reached!");
             return false;
         }
         
@@ -20,7 +20,7 @@ public class BuildingSystem : MonoBehaviour
         if (currency != null && currency.SpendCoins(cost))
         {
             currentLevel++;
-            Debug.Log($"🏗️ Building upgraded to level {currentLevel}!");
+            DebugLogger.Log($"🏗️ Building upgraded to level {currentLevel}!");
             
             // Apply upgrade effects
             ApplyUpgradeBonus();
@@ -34,7 +34,7 @@ public class BuildingSystem : MonoBehaviour
         // Each level gives +20% resource production
         float bonus = 1f + (currentLevel * 0.2f);
         PlayerPrefs.SetFloat("ProductionBonus", bonus);
-        Debug.Log($"Production bonus: {bonus}x");
+        DebugLogger.Log($"Production bonus: {bonus}x");
     }
     
     public int GetUpgradeCost()

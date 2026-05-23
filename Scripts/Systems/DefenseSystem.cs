@@ -43,7 +43,7 @@ public class DefenseSystem : MonoBehaviour
             tower.damage += tower.level * 20;
             tower.range += tower.level;
             tower.upgradeCost += 100;
-            Debug.Log($"🔧 {tower.towerName} upgraded to level {tower.level}!");
+            DebugLogger.Log($"🔧 {tower.towerName} upgraded to level {tower.level}!");
             return true;
         }
         return false;
@@ -55,7 +55,7 @@ public class DefenseSystem : MonoBehaviour
         shieldEndTime = DateTime.Now.AddHours(hours);
         PlayerPrefs.SetInt("ShieldActive", 1);
         PlayerPrefs.SetString("ShieldEndTime", shieldEndTime.ToString());
-        Debug.Log($"🛡️ Shield activated for {hours} hours!");
+        DebugLogger.Log($"🛡️ Shield activated for {hours} hours!");
     }
     
     public bool IsUnderShield()

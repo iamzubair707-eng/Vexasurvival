@@ -17,14 +17,14 @@ public class MobileNotificationManager : MonoBehaviour
         
         #if UNITY_ANDROID
         // Android native notification (will work when game is closed)
-        Debug.Log($"📱 Scheduled chest notification at: {nextChest}");
+        DebugLogger.Log($"📱 Scheduled chest notification at: {nextChest}");
         #endif
         
-        Debug.Log("🎁 Chest notification scheduled! Will remind you in 3 hours.");
+        DebugLogger.Log("🎁 Chest notification scheduled! Will remind you in 3 hours.");
     }
     
     public void SendTestNotification()
     {
-        Debug.Log("📱🔔 TEST NOTIFICATION: Your chest is ready to claim!");
+        DebugLogger.Log("📱🔔 TEST NOTIFICATION: Your chest is ready to claim!");
     }
 }

@@ -24,7 +24,7 @@ public class EnergySystem : MonoBehaviour
         }
         else
         {
-            Debug.Log($"❌ Not enough energy! Need {amount}, have {currentEnergy}");
+            DebugLogger.Log($"❌ Not enough energy! Need {amount}, have {currentEnergy}");
             NotificationManager notif = GetComponent<NotificationManager>();
             if (notif != null)
                 notif.ShowNotification("❌ Not enough energy! Wait or buy energy!", "warning");
@@ -38,7 +38,7 @@ public class EnergySystem : MonoBehaviour
         {
             currentEnergy += energyRegenRate;
             currentEnergy = Mathf.Min(currentEnergy, maxEnergy);
-            Debug.Log($"⚡ Energy regenerated: {currentEnergy}/{maxEnergy}");
+            DebugLogger.Log($"⚡ Energy regenerated: {currentEnergy}/{maxEnergy}");
             SaveEnergyData();
         }
     }
@@ -58,7 +58,7 @@ public class EnergySystem : MonoBehaviour
         {
             currentEnergy += amount;
             currentEnergy = Mathf.Min(currentEnergy, maxEnergy);
-            Debug.Log($"⚡ Bought {amount} energy!");
+            DebugLogger.Log($"⚡ Bought {amount} energy!");
             SaveEnergyData();
         }
     }

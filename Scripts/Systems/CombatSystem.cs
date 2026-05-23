@@ -42,7 +42,7 @@ public class CombatSystem : MonoBehaviour
         if (myPower > targetDefense)
         {
             int loot = Random.Range(30, 100);
-            Debug.Log($"⚔️ RAID SUCCESS on {target}! Loot: {loot} scrap");
+            DebugLogger.Log($"⚔️ RAID SUCCESS on {target}! Loot: {loot} scrap");
             
             CoreResources resources = GetComponent<CoreResources>();
             resources.AddResource("scrap", loot);
@@ -54,7 +54,7 @@ public class CombatSystem : MonoBehaviour
         else
         {
             int damage = Random.Range(20, 60);
-            Debug.Log($"💀 RAID FAILED! Lost {damage} resources!");
+            DebugLogger.Log($"💀 RAID FAILED! Lost {damage} resources!");
             
             CoreResources resources = GetComponent<CoreResources>();
             resources.SpendResource("scrap", damage);
@@ -71,21 +71,21 @@ public class CombatSystem : MonoBehaviour
         
         if (defenseSystem != null && defenseSystem.isShieldActive)
         {
-            Debug.Log("🛡️ Shield protected the base!");
+            DebugLogger.Log("🛡️ Shield protected the base!");
             return;
         }
         
         if (attackerPower > myDefense)
         {
             int loss = Random.Range(20, 80);
-            Debug.Log($"🏚️ Base breached! Lost {loss} scrap!");
+            DebugLogger.Log($"🏚️ Base breached! Lost {loss} scrap!");
             
             CoreResources resources = GetComponent<CoreResources>();
             resources.SpendResource("scrap", loss);
         }
         else
         {
-            Debug.Log("🏆 Defense successful!");
+            DebugLogger.Log("🏆 Defense successful!");
         }
     }
 }

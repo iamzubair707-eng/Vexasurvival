@@ -46,7 +46,7 @@ public class QuestManager : MonoBehaviour
             if (q.requiredType == type)
             {
                 q.progress += amount;
-                Debug.Log($"📋 Quest '{q.title}': {q.progress}/{q.requiredAmount}");
+                DebugLogger.Log($"📋 Quest '{q.title}': {q.progress}/{q.requiredAmount}");
                 
                 if (q.progress >= q.requiredAmount)
                 {
@@ -69,7 +69,7 @@ public class QuestManager : MonoBehaviour
             resourceManager.AddResource("vexa", q.rewardVexa);
         }
         
-        Debug.Log($"🎉 QUEST COMPLETE: {q.title}! +{q.rewardVexa} VEXA");
+        DebugLogger.Log($"🎉 QUEST COMPLETE: {q.title}! +{q.rewardVexa} VEXA");
         
         // Show notification
         NotificationManager notif = GetComponent<NotificationManager>();
@@ -100,13 +100,13 @@ public class QuestManager : MonoBehaviour
     
     public void ShowQuests()
     {
-        Debug.Log("========== DAILY QUESTS ==========");
+        DebugLogger.Log("========== DAILY QUESTS ==========");
         foreach (Quest q in quests)
         {
             string status = q.isCompleted ? "✅" : $"📊 {q.progress}/{q.requiredAmount}";
-            Debug.Log($"{status} {q.title} → {q.rewardVexa} VEXA");
+            DebugLogger.Log($"{status} {q.title} → {q.rewardVexa} VEXA");
         }
-        Debug.Log("==================================");
+        DebugLogger.Log("==================================");
     }
     
     void OnEnable()
@@ -127,7 +127,7 @@ public class QuestManager : MonoBehaviour
                 }
             }
             PlayerPrefs.SetString("QuestLastDate", today);
-            Debug.Log("🔄 Daily quests reset!");
+            DebugLogger.Log("🔄 Daily quests reset!");
         }
     }
 }

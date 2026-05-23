@@ -50,7 +50,7 @@ public class BattlePassManager : MonoBehaviour
     {
         if (currentLevel >= 50)
         {
-            Debug.Log("Battle Pass already at max level!");
+            DebugLogger.Log("Battle Pass already at max level!");
             return;
         }
         
@@ -75,7 +75,7 @@ public class BattlePassManager : MonoBehaviour
                 notificationManager.ShowNotification($"🎉 BATTLE PASS LEVEL {currentLevel} REACHED! 🎉", "success");
             }
             
-            Debug.Log($"🏆 Battle Pass Level Up! Now Level {currentLevel}");
+            DebugLogger.Log($"🏆 Battle Pass Level Up! Now Level {currentLevel}");
             
             xpToNextLevel = CalculateNextLevelXP();
         }
@@ -97,7 +97,7 @@ public class BattlePassManager : MonoBehaviour
         {
             GiveReward(freeReward);
             freeReward.isClaimed = true;
-            Debug.Log($"🎁 Free reward claimed for level {level}!");
+            DebugLogger.Log($"🎁 Free reward claimed for level {level}!");
         }
         
         // Claim premium reward (if player has premium pass)
@@ -108,7 +108,7 @@ public class BattlePassManager : MonoBehaviour
             {
                 GiveReward(premiumReward);
                 premiumReward.isClaimed = true;
-                Debug.Log($"💎 Premium reward claimed for level {level}!");
+                DebugLogger.Log($"💎 Premium reward claimed for level {level}!");
             }
         }
     }
@@ -119,7 +119,7 @@ public class BattlePassManager : MonoBehaviour
         {
             case "vexa":
                 resourceManager.AddResource("vexa", reward.amount);
-                Debug.Log($"💰 +{reward.amount} VEXA from Battle Pass!");
+                DebugLogger.Log($"💰 +{reward.amount} VEXA from Battle Pass!");
                 break;
                 
             case "wood":
@@ -132,13 +132,13 @@ public class BattlePassManager : MonoBehaviour
                 
             case "rare_blueprint":
                 PlayerPrefs.SetInt("HasRareBlueprint", 1);
-                Debug.Log("📜 RARE BLUEPRINT UNLOCKED!");
+                DebugLogger.Log("📜 RARE BLUEPRINT UNLOCKED!");
                 break;
                 
             case "shield":
                 PlayerPrefs.SetInt("ShieldActive", 1);
                 PlayerPrefs.SetFloat("ShieldEndTime", Time.time + 86400);
-                Debug.Log("🛡️ 24-HOUR SHIELD ACTIVATED!");
+                DebugLogger.Log("🛡️ 24-HOUR SHIELD ACTIVATED!");
                 break;
         }
     }
@@ -147,7 +147,7 @@ public class BattlePassManager : MonoBehaviour
     {
         if (hasPremiumPass)
         {
-            Debug.Log("Already have premium pass!");
+            DebugLogger.Log("Already have premium pass!");
             return;
         }
         
@@ -172,11 +172,11 @@ public class BattlePassManager : MonoBehaviour
                 notificationManager.ShowNotification("💎 PREMIUM BATTLE PASS UNLOCKED! 💎", "success");
             }
             
-            Debug.Log("Premium Battle Pass purchased! All past rewards claimed!");
+            DebugLogger.Log("Premium Battle Pass purchased! All past rewards claimed!");
         }
         else
         {
-            Debug.Log("Not enough VEXA to purchase premium pass! Need 100 VEXA");
+            DebugLogger.Log("Not enough VEXA to purchase premium pass! Need 100 VEXA");
         }
         
         SaveBattlePassData();
@@ -184,32 +184,32 @@ public class BattlePassManager : MonoBehaviour
     
     public void ShowBattlePassUI()
     {
-        Debug.Log("========== BATTLE PASS ==========");
-        Debug.Log($"Level: {currentLevel}/50");
-        Debug.Log($"XP: {currentXP}/{xpToNextLevel}");
-        Debug.Log($"Premium: {(hasPremiumPass ? "✅ ACTIVE" : "❌ INACTIVE (100 VEXA to unlock)")}");
-        Debug.Log("================================");
+        DebugLogger.Log("========== BATTLE PASS ==========");
+        DebugLogger.Log($"Level: {currentLevel}/50");
+        DebugLogger.Log($"XP: {currentXP}/{xpToNextLevel}");
+        DebugLogger.Log($"Premium: {(hasPremiumPass ? "✅ ACTIVE" : "❌ INACTIVE (100 VEXA to unlock)")}");
+        DebugLogger.Log("================================");
         
         // Show next 5 rewards
-        Debug.Log("--- UPCOMING REWARDS ---");
+        DebugLogger.Log("--- UPCOMING REWARDS ---");
         for (int i = currentLevel; i <= Mathf.Min(currentLevel + 5, 50); i++)
         {
             BattlePassReward free = freeRewards.Find(r => r.level == i);
             if (free != null)
             {
-                Debug.Log($"Level {i}: 🆓 +{free.amount} VEXA");
+                DebugLogger.Log($"Level {i}: 🆓 +{free.amount} VEXA");
                 
                 if (hasPremiumPass || i <= currentLevel)
                 {
                     BattlePassReward premium = premiumRewards.Find(r => r.level == i);
                     if (premium != null)
                     {
-                        Debug.Log($"        💎 +{premium.amount} VEXA");
+                        DebugLogger.Log($"        💎 +{premium.amount} VEXA");
                     }
                 }
             }
         }
-        Debug.Log("================================");
+        DebugLogger.Log("================================");
     }
     
     void SaveBattlePassData()

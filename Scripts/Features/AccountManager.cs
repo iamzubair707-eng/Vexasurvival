@@ -25,7 +25,7 @@ public class AccountManager : MonoBehaviour
     
     public void DeleteAccount()
     {
-        Debug.Log("⚠️ Deleting all user data...");
+        DebugLogger.Log("⚠️ Deleting all user data...");
         
         // Delete all PlayerPrefs
         PlayerPrefs.DeleteAll();
@@ -33,7 +33,7 @@ public class AccountManager : MonoBehaviour
         // Clear all saved data
         PlayerPrefs.SetInt("PrivacyAccepted", 0);
         
-        Debug.Log("✅ Account deleted successfully!");
+        DebugLogger.Log("✅ Account deleted successfully!");
         
         HideDeleteConfirmation();
         
@@ -47,7 +47,7 @@ public class AccountManager : MonoBehaviour
         if (profile != null)
         {
             profile.ShowProfile();
-            Debug.Log("📤 User data exported to console");
+            DebugLogger.Log("📤 User data exported to console");
         }
     }
 }

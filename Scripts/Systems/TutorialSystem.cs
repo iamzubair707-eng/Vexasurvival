@@ -51,7 +51,7 @@ public class TutorialSystem : MonoBehaviour
         if (currentStep < tutorialMessages.Length)
         {
             uiManager?.ShowNotification(tutorialMessages[currentStep], Color.yellow, 5f);
-            Debug.Log($"📚 Tutorial Step {currentStep + 1}: {tutorialMessages[currentStep]}");
+            DebugLogger.Log($"📚 Tutorial Step {currentStep + 1}: {tutorialMessages[currentStep]}");
         }
         else
         {
@@ -65,7 +65,7 @@ public class TutorialSystem : MonoBehaviour
         
         if (currentStep < expectedActions.Length && action == expectedActions[currentStep])
         {
-            Debug.Log($"✅ Tutorial: Completed step {currentStep + 1} - {action}");
+            DebugLogger.Log($"✅ Tutorial: Completed step {currentStep + 1} - {action}");
             currentStep++;
             ShowTutorialStep();
         }
@@ -84,7 +84,7 @@ public class TutorialSystem : MonoBehaviour
         }
         
         uiManager?.ShowNotification("🎉 TUTORIAL COMPLETE! +500 Coins, +50 Gems!", Color.green, 4f);
-        Debug.Log("🎉 Tutorial completed! Rewards given!");
+        DebugLogger.Log("🎉 Tutorial completed! Rewards given!");
     }
     
     public void SkipTutorial()

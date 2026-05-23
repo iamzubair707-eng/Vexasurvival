@@ -23,11 +23,11 @@ public class MoralChoiceManager : MonoBehaviour
     
     public void PresentChoice(MoralChoice choice)
     {
-        Debug.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Debug.Log($"⚖️ {choice.question}");
-        Debug.Log($"1️⃣ {choice.option1} (+{choice.moralityGain1} morality)");
-        Debug.Log($"2️⃣ {choice.option2} ({choice.moralityGain2} morality)");
-        Debug.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log($"⚖️ {choice.question}");
+        DebugLogger.Log($"1️⃣ {choice.option1} (+{choice.moralityGain1} morality)");
+        DebugLogger.Log($"2️⃣ {choice.option2} ({choice.moralityGain2} morality)");
+        DebugLogger.Log($"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     }
     
     public void MakeChoice(int choiceIndex, MoralChoice choice)
@@ -40,7 +40,7 @@ public class MoralChoiceManager : MonoBehaviour
         ApplyLongTermEffect(gain);
         SaveMorality();
         
-        Debug.Log($"✅ Morality changed by {gain}. Now: {moralityPoints} ({moralityTier})");
+        DebugLogger.Log($"✅ Morality changed by {gain}. Now: {moralityPoints} ({moralityTier})");
     }
     
     void UpdateMoralityTier()
@@ -67,11 +67,11 @@ public class MoralChoiceManager : MonoBehaviour
         
         if (moralityTier == "Saint")
         {
-            Debug.Log("🌟 Survivors worship you! +50% production!");
+            DebugLogger.Log("🌟 Survivors worship you! +50% production!");
         }
         else if (moralityTier == "Demon")
         {
-            Debug.Log("💀 Everyone fears you! Raid damage +30%, but traders avoid you!");
+            DebugLogger.Log("💀 Everyone fears you! Raid damage +30%, but traders avoid you!");
         }
         
         // Trigger reputation-based events
@@ -85,11 +85,11 @@ public class MoralChoiceManager : MonoBehaviour
     {
         if (moralityTier == "Saint")
         {
-            Debug.Log("🎁 A mysterious merchant offers you rare items!");
+            DebugLogger.Log("🎁 A mysterious merchant offers you rare items!");
         }
         else if (moralityTier == "Demon")
         {
-            Debug.Log("⚔️ Bounty hunters are tracking you!");
+            DebugLogger.Log("⚔️ Bounty hunters are tracking you!");
             // Trigger attack
         }
     }

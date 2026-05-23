@@ -16,7 +16,7 @@ public class ClanSystem : MonoBehaviour
         // Check if clan already exists
         if (allClans.Exists(c => c.clanName == clanName))
         {
-            Debug.Log("Clan name already exists!");
+            DebugLogger.Log("Clan name already exists!");
             return false;
         }
         
@@ -31,7 +31,7 @@ public class ClanSystem : MonoBehaviour
         currentClan = newClan;
         
         SaveClans();
-        Debug.Log($"🏰 Clan '{clanName}' created by {leaderName}!");
+        DebugLogger.Log($"🏰 Clan '{clanName}' created by {leaderName}!");
         return true;
     }
     
@@ -41,13 +41,13 @@ public class ClanSystem : MonoBehaviour
         
         if (targetClan == null)
         {
-            Debug.Log("Clan not found!");
+            DebugLogger.Log("Clan not found!");
             return false;
         }
         
         if (targetClan.members.Count >= 50)
         {
-            Debug.Log("Clan is full!");
+            DebugLogger.Log("Clan is full!");
             return false;
         }
         
@@ -55,7 +55,7 @@ public class ClanSystem : MonoBehaviour
         currentClan = targetClan;
         
         SaveClans();
-        Debug.Log($"✅ {playerName} joined clan '{clanName}'!");
+        DebugLogger.Log($"✅ {playerName} joined clan '{clanName}'!");
         return true;
     }
     
@@ -74,21 +74,21 @@ public class ClanSystem : MonoBehaviour
         
         if (enemyClan == null || currentClan == null)
         {
-            Debug.Log("Cannot start clan war!");
+            DebugLogger.Log("Cannot start clan war!");
             return;
         }
         
-        Debug.Log($"⚔️ CLAN WAR: {currentClan.clanName} vs {enemyClan.clanName} ⚔️");
+        DebugLogger.Log($"⚔️ CLAN WAR: {currentClan.clanName} vs {enemyClan.clanName} ⚔️");
         
         // Calculate war result based on total VEXA
         if (currentClan.totalVexa > enemyClan.totalVexa)
         {
             int reward = currentClan.totalVexa / 10;
-            Debug.Log($"🏆 {currentClan.clanName} WINS! Reward: {reward} VEXA each!");
+            DebugLogger.Log($"🏆 {currentClan.clanName} WINS! Reward: {reward} VEXA each!");
         }
         else
         {
-            Debug.Log($"💀 {currentClan.clanName} LOST! Train more!");
+            DebugLogger.Log($"💀 {currentClan.clanName} LOST! Train more!");
         }
     }
     
@@ -96,12 +96,12 @@ public class ClanSystem : MonoBehaviour
     {
         allClans.Sort((a, b) => b.totalVexa.CompareTo(a.totalVexa));
         
-        Debug.Log("========== TOP CLANS ==========");
+        DebugLogger.Log("========== TOP CLANS ==========");
         for (int i = 0; i < Mathf.Min(10, allClans.Count); i++)
         {
-            Debug.Log($"{i+1}. {allClans[i].clanName} - {allClans[i].totalVexa} VEXA (Lvl {allClans[i].clanLevel})");
+            DebugLogger.Log($"{i+1}. {allClans[i].clanName} - {allClans[i].totalVexa} VEXA (Lvl {allClans[i].clanLevel})");
         }
-        Debug.Log("===============================");
+        DebugLogger.Log("===============================");
     }
     
     void SaveClans()

@@ -64,11 +64,11 @@ public class PurchaseSystem : MonoBehaviour
         if (success)
         {
             UnlockItem(item);
-            Debug.Log($"✅ Purchased: {item.itemName} with {currencyType}!");
+            DebugLogger.Log($"✅ Purchased: {item.itemName} with {currencyType}!");
         }
         else
         {
-            Debug.Log($"❌ Failed to purchase {item.itemName}. Not enough {currencyType}!");
+            DebugLogger.Log($"❌ Failed to purchase {item.itemName}. Not enough {currencyType}!");
         }
         
         return success;
@@ -102,26 +102,26 @@ public class PurchaseSystem : MonoBehaviour
     
     public void ShowShop()
     {
-        Debug.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        Debug.Log("🛒 ITEM SHOP");
-        Debug.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("🛒 ITEM SHOP");
+        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         
-        Debug.Log("👔 COSTUMES");
+        DebugLogger.Log("👔 COSTUMES");
         foreach (var item in shopItems.FindAll(i => i.category == "costume"))
-            Debug.Log($"   {item.itemName} — {item.coinCost}🪙 / {item.gemCost}💎");
+            DebugLogger.Log($"   {item.itemName} — {item.coinCost}🪙 / {item.gemCost}💎");
         
-        Debug.Log("\n👥 WORKERS");
+        DebugLogger.Log("\n👥 WORKERS");
         foreach (var item in shopItems.FindAll(i => i.category == "slave"))
-            Debug.Log($"   {item.itemName} — {item.coinCost}🪙 / {item.gemCost}💎");
+            DebugLogger.Log($"   {item.itemName} — {item.coinCost}🪙 / {item.gemCost}💎");
         
-        Debug.Log("\n⚡ BOOSTS");
+        DebugLogger.Log("\n⚡ BOOSTS");
         foreach (var item in shopItems.FindAll(i => i.category == "boost"))
-            Debug.Log($"   {item.itemName} — {item.coinCost}🪙 / {item.gemCost}💎");
+            DebugLogger.Log($"   {item.itemName} — {item.coinCost}🪙 / {item.gemCost}💎");
         
-        Debug.Log("\n✨ SPECIAL");
+        DebugLogger.Log("\n✨ SPECIAL");
         foreach (var item in shopItems.FindAll(i => i.category == "special"))
-            Debug.Log($"   {item.itemName} — {item.coinCost}🪙 / {item.gemCost}💎");
+            DebugLogger.Log($"   {item.itemName} — {item.coinCost}🪙 / {item.gemCost}💎");
         
-        Debug.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        DebugLogger.Log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     }
 }
