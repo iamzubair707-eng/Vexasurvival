@@ -4,103 +4,84 @@ using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
-    [Header("Panels")]
-    public GameObject mainMenuPanel;
-    public GameObject gamePanel;
-    public GameObject shopPanel;
-    public GameObject clanPanel;
+    public static UIManager Instance { get; private set; }
     
-    [Header("Effects")]
-    public Image fadePanel;
-    public float fadeDuration = 0.5f;
+    [Header("Cached UI References")]
+    [SerializeField] private Text woodText;
+    [SerializeField] private Text stoneText;
+    [SerializeField] private Text coinText;
+    [SerializeField] private Text gemText;
+    [SerializeField] private Text troopText;
+    [SerializeField] private Text levelText;
+    [SerializeField] private Text xpText;
+    
+    private MasterGameManager gameManager;
+    
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     
     void Start()
     {
-        // Start with fade in
-        StartCoroutine(FadeIn());
+        gameManager = MasterGameManager.Instance;
     }
     
-    public void ShowPanel(GameObject panel)
+    public void UpdateResources(int wood, int stone, int coins, int gems)
     {
-        // Disable all panels first
-        mainMenuPanel.SetActive(false);
-        gamePanel.SetActive(false);
-        shopPanel.SetActive(false);
-        clanPanel.SetActive(false);
+        if (woodText != null) woodText.text = $"🪵 {wood}";
+        if (stoneText != null) stoneText.text = $"🪨 {stone}";
+        if (coinText != null) coinText.text = $"💰 {coins}";
+        if (gemText != null) gemText.text = $"💎 {gems}";
+    }
+    
+    public void UpdateTroopCount(int count)
+    {
+        if (troopText != null) troopText.text = $"⚔️ Troops: {count}";
+    }
+    
+    public void UpdateLevel(int level, int currentXP, int neededXP)
+    {
+        if (levelText != null) levelText.text = $"🌟 Level {level}";
+        if (xpText != null) xpText.text = $"XP: {currentXP}/{neededXP}";
+    }
+    
+    public void UpdateStatus(int level, int troops, int energy)
+    {
+        UpdateTroopCount(troops);
+        // Add more status updates as needed
+    }
+    
+    public void ShowNotification(string message, Color color, float duration = 2f)
+    {
+        StartCoroutine(ShowNotificationCoroutine(message, color, duration));
+    }
+    
+    IEnumerator ShowNotificationCoroutine(string message, Color color, float duration)
+    {
+        GameObject go = new GameObject("Notification");
+        go.transform.SetParent(transform);
         
-        // Enable requested panel with scale animation
-        panel.SetActive(true);
-        StartCoroutine(ScaleAnimation(panel));
-    }
-    
-    public void ButtonClickEffect(Button button)
-    {
-        StartCoroutine(ButtonAnimation(button));
-    }
-    
-    public void ShowFloatingText(string text, Vector3 position, Color color)
-    {
-        // Create floating text object
-        GameObject textObj = new GameObject("FloatingText");
-        textObj.transform.position = position;
+        Text text = go.AddComponent<Text>();
+        text.text = message;
+        text.color = color;
+        text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        text.fontSize = 24;
+        text.alignment = TextAnchor.MiddleCenter;
         
-        Text txt = textObj.AddComponent<Text>();
-        txt.text = text;
-        txt.color = color;
-        txt.fontSize = 24;
-        txt.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        RectTransform rect = go.GetComponent<RectTransform>();
+        rect.anchoredPosition = new Vector2(0, 100);
+        rect.sizeDelta = new Vector2(400, 60);
         
-        // Animate and destroy
-        StartCoroutine(FloatAndFade(textObj));
-    }
-    
-    IEnumerator FadeIn()
-    {
-        float t = 0;
-        while (t < fadeDuration)
-        {
-            t += Time.deltaTime;
-            float alpha = Mathf.Lerp(1, 0, t / fadeDuration);
-            fadePanel.color = new Color(0, 0, 0, alpha);
-            yield return null;
-        }
-    }
-    
-    IEnumerator ScaleAnimation(GameObject obj)
-    {
-        obj.transform.localScale = Vector3.zero;
-        float t = 0;
-        while (t < 0.3f)
-        {
-            t += Time.deltaTime;
-            float scale = Mathf.Lerp(0, 1, t / 0.3f);
-            obj.transform.localScale = new Vector3(scale, scale, scale);
-            yield return null;
-        }
-    }
-    
-    IEnumerator ButtonAnimation(Button button)
-    {
-        Vector3 originalScale = button.transform.localScale;
-        button.transform.localScale = originalScale * 0.95f;
-        yield return new WaitForSeconds(0.1f);
-        button.transform.localScale = originalScale;
-    }
-    
-    IEnumerator FloatAndFade(GameObject obj)
-    {
-        Text txt = obj.GetComponent<Text>();
-        float t = 0;
-        Vector3 startPos = obj.transform.position;
-        
-        while (t < 1f)
-        {
-            t += Time.deltaTime;
-            obj.transform.position = startPos + new Vector3(0, t * 50, 0);
-            txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, 1 - t);
-            yield return null;
-        }
-        
-        Destroy(obj);
+        yield return new WaitForSeconds(duration);
+        Destroy(go);
     }
 }
