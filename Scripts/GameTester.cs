@@ -217,3 +217,7 @@ public class GameTester : MonoBehaviour
         GUI.Label(new Rect(20, 265, 280, 20), "Press 0 → Reset All Data", style);
     }
 }
+void OnGUI()
+{
+    GUI.Box(new Rect(10, 10, 200, 100), "VEXA SURVIVAL\nPress 1-9 to test");
+}
