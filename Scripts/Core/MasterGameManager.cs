@@ -4,18 +4,18 @@ using System.Collections.Generic;
 
 public class MasterGameManager : MonoBehaviour
 {
-    #region Singleton Pattern
+    #region Singleton (Thread-Safe)
     private static MasterGameManager _instance;
     private static readonly object _lock = new object();
-    private static bool _applicationIsQuitting = false;
+    private static bool _quitting = false;
     
     public static MasterGameManager Instance
     {
         get
         {
-            if (_applicationIsQuitting)
+            if (_quitting)
             {
-                Debug.LogWarning("[MasterGameManager] Already destroyed! Returning null.");
+                Debug.LogWarning("MasterGameManager already destroyed!");
                 return null;
             }
             
@@ -37,46 +37,24 @@ public class MasterGameManager : MonoBehaviour
     }
     #endregion
     
-    #region Cached System References
-    [Header("⚡ SYSTEM REFERENCES (Auto-Cached)")]
-    [SerializeField] private CoreResources _resources;
-    [SerializeField] private CurrencyManager _currency;
-    [SerializeField] private BuildingSystem _buildingSystem;
-    [SerializeField] private CombatSystem _combatSystem;
-    [SerializeField] private PVERaidSystem _pveRaid;
-    [SerializeField] private ChestSystem _chestSystem;
-    [SerializeField] private QuestManager _questManager;
-    [SerializeField] private TutorialSystem _tutorialSystem;
-    [SerializeField] private UIManager _uiManager;
-    [SerializeField] private EnergySystem _energySystem;
-    [SerializeField] private AudioManager _audio;
-    [SerializeField] private VisualManager _visual;
-    [SerializeField] private ClanSystem _clan;
-    [SerializeField] private Leaderboard _leaderboard;
-    [SerializeField] private NotificationManager _notification;
-    [SerializeField] private VehicleSystem _vehicle;
-    [SerializeField] private DefenseSystem _defense;
-    [SerializeField] private OfflineRewards _offlineRewards;
-    [SerializeField] private GameBalancer _balancer;
-    [SerializeField] private AntiCheat _antiCheat;
-    [SerializeField] private MentalHealthSystem _mentalHealth;
-    
-    public CoreResources Resources => _resources;
-    public CurrencyManager Currency => _currency;
-    public BuildingSystem BuildingSystem => _buildingSystem;
-    public CombatSystem CombatSystem => _combatSystem;
-    public PVERaidSystem PVERaid => _pveRaid;
-    public ChestSystem ChestSystem => _chestSystem;
-    public QuestManager QuestManager => _questManager;
-    public TutorialSystem TutorialSystem => _tutorialSystem;
-    public UIManager UIManager => _uiManager;
-    public EnergySystem EnergySystem => _energySystem;
-    public AudioManager Audio => _audio;
-    public VisualManager Visual => _visual;
-    public VehicleSystem Vehicle => _vehicle;
-    public GameBalancer Balancer => _balancer;
-    public AntiCheat AntiCheat => _antiCheat;
-    public MentalHealthSystem MentalHealth => _mentalHealth;
+    #region Cached System References (No FindObjectOfType needed!)
+    [Header("⚡ SYSTEM REFERENCES")]
+    public CoreResources Resources { get; private set; }
+    public CurrencyManager Currency { get; private set; }
+    public BuildingSystem BuildingSystem { get; private set; }
+    public CombatSystem CombatSystem { get; private set; }
+    public PVERaidSystem PVERaid { get; private set; }
+    public ChestSystem ChestSystem { get; private set; }
+    public QuestManager QuestManager { get; private set; }
+    public TutorialSystem TutorialSystem { get; private set; }
+    public UIManager UIManager { get; private set; }
+    public EnergySystem EnergySystem { get; private set; }
+    public AudioManager Audio { get; private set; }
+    public VisualManager Visual { get; private set; }
+    public VehicleSystem Vehicle { get; private set; }
+    public GameBalancer Balancer { get; private set; }
+    public AntiCheat AntiCheat { get; private set; }
+    public MentalHealthSystem MentalHealth { get; private set; }
     #endregion
     
     #region Game State
@@ -85,7 +63,6 @@ public class MasterGameManager : MonoBehaviour
     [SerializeField] private int _currentXP = 0;
     [SerializeField] private int _troopCount = 0;
     [SerializeField] private int _buildingLevel = 1;
-    [SerializeField] private int _raidsCompleted = 0;
     [SerializeField] private int _coins = 500;
     [SerializeField] private int _gems = 50;
     [SerializeField] private int _wood = 100;
@@ -94,6 +71,10 @@ public class MasterGameManager : MonoBehaviour
     public int PlayerLevel => _playerLevel;
     public int TroopCount => _troopCount;
     public int BuildingLevel => _buildingLevel;
+    public int Coins => _coins;
+    public int Gems => _gems;
+    public int Wood => _wood;
+    public int Stone => _stone;
     #endregion
     
     private bool _isGameReady = false;
@@ -109,28 +90,33 @@ public class MasterGameManager : MonoBehaviour
         _instance = this;
         DontDestroyOnLoad(gameObject);
         CacheAllSystems();
+        LoadGameData();
     }
     
     void CacheAllSystems()
     {
-        _resources = FindFirstObjectByType<CoreResources>();
-        _currency = FindFirstObjectByType<CurrencyManager>();
-        _buildingSystem = FindFirstObjectByType<BuildingSystem>();
-        _combatSystem = FindFirstObjectByType<CombatSystem>();
-        _pveRaid = FindFirstObjectByType<PVERaidSystem>();
-        _chestSystem = FindFirstObjectByType<ChestSystem>();
-        _questManager = FindFirstObjectByType<QuestManager>();
-        _tutorialSystem = FindFirstObjectByType<TutorialSystem>();
-        _uiManager = FindFirstObjectByType<UIManager>();
-        _energySystem = FindFirstObjectByType<EnergySystem>();
-        _audio = FindFirstObjectByType<AudioManager>();
-        _visual = FindFirstObjectByType<VisualManager>();
-        _vehicle = FindFirstObjectByType<VehicleSystem>();
-        _balancer = FindFirstObjectByType<GameBalancer>();
-        _antiCheat = FindFirstObjectByType<AntiCheat>();
-        _mentalHealth = FindFirstObjectByType<MentalHealthSystem>();
+        // Find all systems ONCE at startup
+        Resources = FindFirstObjectByType<CoreResources>();
+        Currency = FindFirstObjectByType<CurrencyManager>();
+        BuildingSystem = FindFirstObjectByType<BuildingSystem>();
+        CombatSystem = FindFirstObjectByType<CombatSystem>();
+        PVERaid = FindFirstObjectByType<PVERaidSystem>();
+        ChestSystem = FindFirstObjectByType<ChestSystem>();
+        QuestManager = FindFirstObjectByType<QuestManager>();
+        TutorialSystem = FindFirstObjectByType<TutorialSystem>();
+        UIManager = FindFirstObjectByType<UIManager>();
+        EnergySystem = FindFirstObjectByType<EnergySystem>();
+        Audio = FindFirstObjectByType<AudioManager>();
+        Visual = FindFirstObjectByType<VisualManager>();
+        Vehicle = FindFirstObjectByType<VehicleSystem>();
+        Balancer = FindFirstObjectByType<GameBalancer>();
+        AntiCheat = FindFirstObjectByType<AntiCheat>();
+        MentalHealth = FindFirstObjectByType<MentalHealthSystem>();
         
-        LoadGameData();
+        // Auto-create critical systems if missing
+        if (Resources == null) Resources = gameObject.AddComponent<CoreResources>();
+        if (Currency == null) Currency = gameObject.AddComponent<CurrencyManager>();
+        if (UIManager == null) UIManager = gameObject.AddComponent<UIManager>();
     }
     
     void Start()
@@ -142,13 +128,12 @@ public class MasterGameManager : MonoBehaviour
     IEnumerator DelayedStart()
     {
         yield return new WaitForSeconds(0.5f);
-        
-        if (_tutorialSystem != null && !_tutorialSystem.IsTutorialComplete())
-        {
-            _tutorialSystem.StartTutorial();
-        }
-        
         UpdateAllUI();
+        
+        if (TutorialSystem != null && !TutorialSystem.IsTutorialComplete())
+        {
+            TutorialSystem.StartTutorial();
+        }
     }
     
     #region Core Loop Methods
@@ -160,10 +145,11 @@ public class MasterGameManager : MonoBehaviour
         {
             case "wood": _wood += amount; break;
             case "stone": _stone += amount; break;
+            default: return;
         }
         
-        _questManager?.UpdateProgress(type, amount);
-        _tutorialSystem?.CheckAction("gather");
+        QuestManager?.UpdateProgress(type, amount);
+        TutorialSystem?.CheckAction("gather");
         UpdateResourceUI();
         SaveGameData();
     }
@@ -174,17 +160,17 @@ public class MasterGameManager : MonoBehaviour
         
         int cost = 50 * _buildingLevel;
         
-        if (_currency != null && _currency.SpendCoins(cost))
+        if (SpendCoins(cost))
         {
             _buildingLevel++;
-            _uiManager?.ShowNotification($"🏗️ Building level {_buildingLevel}!", Color.green);
-            _tutorialSystem?.CheckAction("upgrade");
+            UIManager?.ShowNotification($"🏗️ Building level {_buildingLevel}!", Color.green);
+            TutorialSystem?.CheckAction("upgrade");
             UpdateBuildingUI();
             SaveGameData();
         }
         else
         {
-            _uiManager?.ShowNotification($"❌ Need {cost} coins!", Color.red);
+            UIManager?.ShowNotification($"❌ Need {cost} coins!", Color.red);
         }
     }
     
@@ -194,17 +180,17 @@ public class MasterGameManager : MonoBehaviour
         
         int cost = 30;
         
-        if (_currency != null && _currency.SpendCoins(cost))
+        if (SpendCoins(cost))
         {
             _troopCount++;
-            _uiManager?.ShowNotification($"⚔️ Troops: {_troopCount}", Color.cyan);
-            _tutorialSystem?.CheckAction("train");
+            UIManager?.ShowNotification($"⚔️ Troops: {_troopCount}", Color.cyan);
+            TutorialSystem?.CheckAction("train");
             UpdateTroopUI();
             SaveGameData();
         }
         else
         {
-            _uiManager?.ShowNotification($"❌ Need {cost} coins!", Color.red);
+            UIManager?.ShowNotification($"❌ Need {cost} coins!", Color.red);
         }
     }
     
@@ -212,28 +198,26 @@ public class MasterGameManager : MonoBehaviour
     {
         if (_troopCount <= 0)
         {
-            _uiManager?.ShowNotification("❌ No troops!", Color.red);
+            UIManager?.ShowNotification("❌ No troops! Train first!", Color.red);
             return;
         }
         
         int playerPower = _troopCount * 20 + _buildingLevel * 10;
         int enemyPower = Random.Range(30, 80);
-        
         bool isVictory = playerPower > enemyPower;
         
         if (isVictory)
         {
             int loot = Random.Range(30, 100);
             _wood += loot;
-            _raidsCompleted++;
             AddXP(20);
-            _uiManager?.ShowNotification($"🏆 VICTORY! +{loot} wood!", Color.green);
-            _tutorialSystem?.CheckAction("raid");
+            UIManager?.ShowNotification($"🏆 VICTORY! +{loot} wood!", Color.green);
+            TutorialSystem?.CheckAction("raid");
         }
         else
         {
-            _troopCount = Mathf.Max(0, _troopCount - 1);
-            _uiManager?.ShowNotification($"💀 DEFEAT! Lost 1 troop!", Color.red);
+            _troopCount--;
+            UIManager?.ShowNotification($"💀 DEFEAT! Lost 1 troop!", Color.red);
         }
         
         UpdateAllUI();
@@ -244,14 +228,23 @@ public class MasterGameManager : MonoBehaviour
     {
         int reward = Random.Range(20, 100);
         _coins += reward;
-        _uiManager?.ShowNotification($"🎁 +{reward} coins from chest!", Color.magenta);
-        _tutorialSystem?.CheckAction("chest");
+        UIManager?.ShowNotification($"🎁 +{reward} coins!", Color.magenta);
+        TutorialSystem?.CheckAction("chest");
         UpdateAllUI();
         SaveGameData();
     }
-    #endregion
     
-    void AddXP(int amount)
+    private bool SpendCoins(int amount)
+    {
+        if (_coins >= amount)
+        {
+            _coins -= amount;
+            return true;
+        }
+        return false;
+    }
+    
+    private void AddXP(int amount)
     {
         _currentXP += amount;
         int needed = _playerLevel * 100;
@@ -260,13 +253,17 @@ public class MasterGameManager : MonoBehaviour
         {
             _currentXP -= needed;
             _playerLevel++;
-            _uiManager?.ShowNotification($"🎉 LEVEL {_playerLevel}!", Color.yellow);
+            UIManager?.ShowNotification($"🎉 LEVEL {_playerLevel}!", Color.yellow);
+            _coins += 200;
+            _gems += 50;
         }
         
         UpdateLevelUI();
     }
+    #endregion
     
-    void UpdateAllUI()
+    #region UI Updates
+    private void UpdateAllUI()
     {
         UpdateResourceUI();
         UpdateBuildingUI();
@@ -274,41 +271,42 @@ public class MasterGameManager : MonoBehaviour
         UpdateLevelUI();
     }
     
-    void UpdateResourceUI() => _uiManager?.UpdateResources(_wood, _stone, _coins, _gems);
-    void UpdateBuildingUI() => _uiManager?.UpdateStatus(_playerLevel, _troopCount, 0);
-    void UpdateTroopUI() => _uiManager?.UpdateTroopCount(_troopCount);
-    void UpdateLevelUI() => _uiManager?.UpdateLevel(_playerLevel, _currentXP, _playerLevel * 100);
+    private void UpdateResourceUI() => UIManager?.UpdateResources(_wood, _stone, _coins, _gems);
+    private void UpdateBuildingUI() => UIManager?.UpdateStatus(_playerLevel, _troopCount, 0);
+    private void UpdateTroopUI() => UIManager?.UpdateTroopCount(_troopCount);
+    private void UpdateLevelUI() => UIManager?.UpdateLevel(_playerLevel, _currentXP, _playerLevel * 100);
+    #endregion
     
-    void LoadGameData()
+    #region Save/Load
+    private void LoadGameData()
     {
         _playerLevel = PlayerPrefs.GetInt("PlayerLevel", 1);
         _currentXP = PlayerPrefs.GetInt("CurrentXP", 0);
         _troopCount = PlayerPrefs.GetInt("TroopCount", 0);
         _buildingLevel = PlayerPrefs.GetInt("BuildingLevel", 1);
-        _raidsCompleted = PlayerPrefs.GetInt("RaidsCompleted", 0);
         _coins = PlayerPrefs.GetInt("Coins", 500);
         _gems = PlayerPrefs.GetInt("Gems", 50);
         _wood = PlayerPrefs.GetInt("Wood", 100);
         _stone = PlayerPrefs.GetInt("Stone", 50);
     }
     
-    void SaveGameData()
+    private void SaveGameData()
     {
         PlayerPrefs.SetInt("PlayerLevel", _playerLevel);
         PlayerPrefs.SetInt("CurrentXP", _currentXP);
         PlayerPrefs.SetInt("TroopCount", _troopCount);
         PlayerPrefs.SetInt("BuildingLevel", _buildingLevel);
-        PlayerPrefs.SetInt("RaidsCompleted", _raidsCompleted);
         PlayerPrefs.SetInt("Coins", _coins);
         PlayerPrefs.SetInt("Gems", _gems);
         PlayerPrefs.SetInt("Wood", _wood);
         PlayerPrefs.SetInt("Stone", _stone);
         PlayerPrefs.Save();
     }
+    #endregion
     
     void OnApplicationQuit()
     {
-        _applicationIsQuitting = true;
+        _quitting = true;
         SaveGameData();
     }
     
