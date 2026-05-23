@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
+using System.Collections;
 
 /// <summary>
 /// GridMovement — Player tap kare toh us tile pe smoothly move karta hai.
