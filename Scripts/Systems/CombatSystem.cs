@@ -2,43 +2,90 @@ using UnityEngine;
 
 public class CombatSystem : MonoBehaviour
 {
-    public int CalculateRaidPower(int troopCount, int buildingLevel)
+    public int baseAttack = 50;
+    public int baseDefense = 30;
+    public int raidPower = 100;
+    
+    private VehicleManager vehicleManager;
+    private DefenseSystem defenseSystem;
+    
+    void Start()
     {
-        int basePower = 50;
-        int troopPower = troopCount * 20;
-        int buildingBonus = buildingLevel * 10;
-        
-        return basePower + troopPower + buildingBonus;
+        vehicleManager = GetComponent<VehicleManager>();
+        defenseSystem = GetComponent<DefenseSystem>();
     }
     
-    public RaidResult ExecuteRaid(int playerPower, int enemyPower)
+    public int CalculateRaidPower()
     {
-        RaidResult result = new RaidResult();
+        int power = raidPower;
         
-        float winChance = (float)playerPower / (playerPower + enemyPower);
-        result.isVictory = Random.value < winChance;
-        
-        if (result.isVictory)
+        // Vehicle bonus
+        if (vehicleManager != null && vehicleManager.activeVehicle != null)
         {
-            result.lootAmount = Random.Range(30, 100);
-            result.expGain = Random.Range(10, 30);
-            Debug.Log($"⚔️ RAID VICTORY! Loot: {result.lootAmount}, EXP: {result.expGain}");
+            power += (int)vehicleManager.activeVehicle.attackBonus;
+        }
+        
+        // Defense bonus
+        if (defenseSystem != null && defenseSystem.towers.Count > 0)
+        {
+            foreach (var tower in defenseSystem.towers)
+                power += tower.damage;
+        }
+        
+        return power;
+    }
+    
+    public void ExecuteRaid(string target, int targetDefense)
+    {
+        int myPower = CalculateRaidPower();
+        
+        if (myPower > targetDefense)
+        {
+            int loot = Random.Range(30, 100);
+            Debug.Log($"⚔️ RAID SUCCESS on {target}! Loot: {loot} scrap");
+            
+            CoreResources resources = GetComponent<CoreResources>();
+            resources.AddResource("scrap", loot);
+            
+            // Add revenge option
+            RevengeSystem revenge = GetComponent<RevengeSystem>();
+            revenge?.AddRevengeTarget(target);
         }
         else
         {
-            result.lootAmount = 0;
-            result.damageTaken = Random.Range(10, 40);
-            Debug.Log($"💀 RAID DEFEAT! Damage: {result.damageTaken}");
+            int damage = Random.Range(20, 60);
+            Debug.Log($"💀 RAID FAILED! Lost {damage} resources!");
+            
+            CoreResources resources = GetComponent<CoreResources>();
+            resources.SpendResource("scrap", damage);
         }
         
-        return result;
+        // Update mental health
+        MentalHealth mental = GetComponent<MentalHealth>();
+        mental?.AddTrauma("Raid", 10);
     }
     
-    public class RaidResult
+    public void DefendBase(int attackerPower)
     {
-        public bool isVictory;
-        public int lootAmount;
-        public int expGain;
-        public int damageTaken;
+        int myDefense = baseDefense;
+        
+        if (defenseSystem != null && defenseSystem.isShieldActive)
+        {
+            Debug.Log("🛡️ Shield protected the base!");
+            return;
+        }
+        
+        if (attackerPower > myDefense)
+        {
+            int loss = Random.Range(20, 80);
+            Debug.Log($"🏚️ Base breached! Lost {loss} scrap!");
+            
+            CoreResources resources = GetComponent<CoreResources>();
+            resources.SpendResource("scrap", loss);
+        }
+        else
+        {
+            Debug.Log("🏆 Defense successful!");
+        }
     }
 }

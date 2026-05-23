@@ -1,123 +1,106 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance;
-    
-    [Header("Main UI Panels")]
+    [Header("Panels")]
     public GameObject mainMenuPanel;
     public GameObject gamePanel;
-    public GameObject pausePanel;
-    public GameObject settingsPanel;
     public GameObject shopPanel;
     public GameObject clanPanel;
     
-    [Header("Resource Bars")]
-    public Text woodText;
-    public Text stoneText;
-    public Text coinText;
-    public Text gemText;
-    
-    [Header("Status Texts")]
-    public Text levelText;
-    public Text troopText;
-    public Text raidEnergyText;
-    
-    [Header("Notifications")]
-    public GameObject notificationPrefab;
-    public Transform notificationParent;
-    
-    void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-    }
+    [Header("Effects")]
+    public Image fadePanel;
+    public float fadeDuration = 0.5f;
     
     void Start()
     {
-        if (PlayerPrefs.GetInt("TutorialComplete", 0) == 0)
-            ShowMainMenu();
-        else
-            ShowGameUI();
+        // Start with fade in
+        StartCoroutine(FadeIn());
     }
     
-    public void ShowMainMenu()
+    public void ShowPanel(GameObject panel)
     {
-        HideAllPanels();
-        if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
+        // Disable all panels first
+        mainMenuPanel.SetActive(false);
+        gamePanel.SetActive(false);
+        shopPanel.SetActive(false);
+        clanPanel.SetActive(false);
+        
+        // Enable requested panel with scale animation
+        panel.SetActive(true);
+        StartCoroutine(ScaleAnimation(panel));
     }
     
-    public void ShowGameUI()
+    public void ButtonClickEffect(Button button)
     {
-        HideAllPanels();
-        if (gamePanel != null) gamePanel.SetActive(true);
+        StartCoroutine(ButtonAnimation(button));
     }
     
-    public void ShowPauseMenu()
+    public void ShowFloatingText(string text, Vector3 position, Color color)
     {
-        if (pausePanel != null) pausePanel.SetActive(true);
+        // Create floating text object
+        GameObject textObj = new GameObject("FloatingText");
+        textObj.transform.position = position;
+        
+        Text txt = textObj.AddComponent<Text>();
+        txt.text = text;
+        txt.color = color;
+        txt.fontSize = 24;
+        txt.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        
+        // Animate and destroy
+        StartCoroutine(FloatAndFade(textObj));
     }
     
-    public void HidePauseMenu()
+    IEnumerator FadeIn()
     {
-        if (pausePanel != null) pausePanel.SetActive(false);
-    }
-    
-    public void ShowShop()
-    {
-        if (shopPanel != null) shopPanel.SetActive(true);
-    }
-    
-    public void ShowClan()
-    {
-        if (clanPanel != null) clanPanel.SetActive(true);
-    }
-    
-    void HideAllPanels()
-    {
-        if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
-        if (gamePanel != null) gamePanel.SetActive(false);
-        if (pausePanel != null) pausePanel.SetActive(false);
-        if (settingsPanel != null) settingsPanel.SetActive(false);
-        if (shopPanel != null) shopPanel.SetActive(false);
-        if (clanPanel != null) clanPanel.SetActive(false);
-    }
-    
-    public void UpdateResources(int wood, int stone, int coins, int gems)
-    {
-        if (woodText != null) woodText.text = $"🪵 {wood}";
-        if (stoneText != null) stoneText.text = $"🪨 {stone}";
-        if (coinText != null) coinText.text = $"💰 {coins}";
-        if (gemText != null) gemText.text = $"💎 {gems}";
-    }
-    
-    public void UpdateStatus(int level, int troops, int raidEnergy)
-    {
-        if (levelText != null) levelText.text = $"Level: {level}";
-        if (troopText != null) troopText.text = $"Troops: {troops}";
-        if (raidEnergyText != null) raidEnergyText.text = $"Raid Energy: {raidEnergy}";
-    }
-    
-    public void ShowNotification(string message, Color color, float duration = 2f)
-    {
-        if (notificationPrefab != null && notificationParent != null)
+        float t = 0;
+        while (t < fadeDuration)
         {
-            GameObject notif = Instantiate(notificationPrefab, notificationParent);
-            Text text = notif.GetComponentInChildren<Text>();
-            if (text != null)
-            {
-                text.text = message;
-                text.color = color;
-            }
-            Destroy(notif, duration);
+            t += Time.deltaTime;
+            float alpha = Mathf.Lerp(1, 0, t / fadeDuration);
+            fadePanel.color = new Color(0, 0, 0, alpha);
+            yield return null;
         }
-        Debug.Log($"📢 {message}");
     }
     
-    public void ShowFloatingReward(string text, Vector3 position)
+    IEnumerator ScaleAnimation(GameObject obj)
     {
-        // Will be implemented with object pooling
-        Debug.Log($"✨ {text}");
+        obj.transform.localScale = Vector3.zero;
+        float t = 0;
+        while (t < 0.3f)
+        {
+            t += Time.deltaTime;
+            float scale = Mathf.Lerp(0, 1, t / 0.3f);
+            obj.transform.localScale = new Vector3(scale, scale, scale);
+            yield return null;
+        }
+    }
+    
+    IEnumerator ButtonAnimation(Button button)
+    {
+        Vector3 originalScale = button.transform.localScale;
+        button.transform.localScale = originalScale * 0.95f;
+        yield return new WaitForSeconds(0.1f);
+        button.transform.localScale = originalScale;
+    }
+    
+    IEnumerator FloatAndFade(GameObject obj)
+    {
+        Text txt = obj.GetComponent<Text>();
+        float t = 0;
+        Vector3 startPos = obj.transform.position;
+        
+        while (t < 1f)
+        {
+            t += Time.deltaTime;
+            obj.transform.position = startPos + new Vector3(0, t * 50, 0);
+            txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, 1 - t);
+            yield return null;
+        }
+        
+        Destroy(obj);
     }
 }
