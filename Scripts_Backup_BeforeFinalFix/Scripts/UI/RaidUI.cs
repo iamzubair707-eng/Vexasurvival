@@ -15,9 +15,9 @@ public class RaidUI : MonoBehaviour
     
     void Start()
     {
-        pveRaid = MasterGameManager.Instance.PVERaid;
+        pveRaid = FindObjectOfType<PVERaidSystem>();
         pvpRaid = FindObjectOfType<RaidSystem>();
-        energy = MasterGameManager.Instance.EnergySystem;
+        energy = FindObjectOfType<EnergySystem>();
         
         if (pveRaidButton != null)
             pveRaidButton.onClick.AddListener(StartPVERaid);

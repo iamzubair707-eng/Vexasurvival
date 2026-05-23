@@ -12,7 +12,7 @@ public class BuildingUI : MonoBehaviour
     
     void Start()
     {
-        buildingSystem = MasterGameManager.Instance.BuildingSystem;
+        buildingSystem = FindObjectOfType<BuildingSystem>();
         if (upgradeButton != null)
             upgradeButton.onClick.AddListener(OnUpgradeClick);
     }
@@ -20,7 +20,7 @@ public class BuildingUI : MonoBehaviour
     void OnUpgradeClick()
     {
         int cost = buildingSystem?.GetUpgradeCost() ?? 50;
-        CurrencyManager currency = MasterGameManager.Instance.Currency;
+        CurrencyManager currency = FindObjectOfType<CurrencyManager>();
         
         if (currency != null && currency.SpendCoins(cost))
         {

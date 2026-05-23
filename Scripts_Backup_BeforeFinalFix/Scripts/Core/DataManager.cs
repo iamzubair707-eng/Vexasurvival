@@ -109,14 +109,14 @@ public class DataManager : MonoBehaviour
             currentData.stone = resources.GetResource("stone");
         }
         
-        var currency = MasterGameManager.Instance.Currency;
+        var currency = FindObjectOfType<CurrencyManager>();
         if (currency != null)
         {
             currentData.coins = currency.coins;
             currentData.gems = currency.gems;
         }
         
-        var building = MasterGameManager.Instance.BuildingSystem;
+        var building = FindObjectOfType<BuildingSystem>();
         if (building != null)
             currentData.buildingLevel = building.GetCurrentLevel();
     }
@@ -130,7 +130,7 @@ public class DataManager : MonoBehaviour
             resources.SetResource("stone", currentData.stone);
         }
         
-        var currency = MasterGameManager.Instance.Currency;
+        var currency = FindObjectOfType<CurrencyManager>();
         if (currency != null)
         {
             currency.coins = currentData.coins;

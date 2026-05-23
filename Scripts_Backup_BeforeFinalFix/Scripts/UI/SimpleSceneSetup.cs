@@ -43,7 +43,7 @@ public class SimpleSceneSetup : MonoBehaviour
     
     void CreatePlayer()
     {
-        GameObject player = player;
+        GameObject player = GameObject.Find("Player");
         if (player == null)
         {
             player = GameObject.CreatePrimitive(PrimitiveType.Capsule);
@@ -70,7 +70,7 @@ public class SimpleSceneSetup : MonoBehaviour
     
     void CreateGround()
     {
-        GameObject ground = ground;
+        GameObject ground = GameObject.Find("Ground");
         if (ground == null)
         {
             ground = GameObject.CreatePrimitive(PrimitiveType.Plane);

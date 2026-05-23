@@ -28,11 +28,11 @@ public class CoreLoopController : MonoBehaviour
     
     void Start()
     {
-        resources = MasterGameManager.Instance.Resources;
-        currency = MasterGameManager.Instance.Currency;
+        resources = FindObjectOfType<CoreResources>();
+        currency = FindObjectOfType<CurrencyManager>();
         buildings = FindObjectOfType<BuildingManager>();
-        pveRaid = MasterGameManager.Instance.PVERaid;
-        chests = MasterGameManager.Instance.ChestSystem;
+        pveRaid = FindObjectOfType<PVERaidSystem>();
+        chests = FindObjectOfType<ChestSystem>();
         
         // Setup button listeners
         if (gatherWoodButton != null)

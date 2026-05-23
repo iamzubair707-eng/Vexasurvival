@@ -31,8 +31,8 @@ public class TutorialSystem : MonoBehaviour
     
     void Start()
     {
-        uiManager = MasterGameManager.Instance.UIManager;
-        gameManager = MasterGameManager.Instance;
+        uiManager = FindObjectOfType<UIManager>();
+        gameManager = FindObjectOfType<MasterGameManager>();
         
         if (PlayerPrefs.GetInt("TutorialComplete", 0) == 0)
         {
@@ -76,7 +76,7 @@ public class TutorialSystem : MonoBehaviour
         PlayerPrefs.SetInt("TutorialComplete", 1);
         
         // Give completion rewards
-        CurrencyManager currency = MasterGameManager.Instance.Currency;
+        CurrencyManager currency = FindObjectOfType<CurrencyManager>();
         if (currency != null)
         {
             currency.AddCoins(500);

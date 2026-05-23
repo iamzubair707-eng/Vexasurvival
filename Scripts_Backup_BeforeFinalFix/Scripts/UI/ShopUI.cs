@@ -13,7 +13,7 @@ public class ShopUI : MonoBehaviour
     
     void Start()
     {
-        currency = MasterGameManager.Instance.Currency;
+        currency = FindObjectOfType<CurrencyManager>();
         
         if (buyCoinsButton != null)
             buyCoinsButton.onClick.AddListener(() => BuyCoins(100));
@@ -25,14 +25,14 @@ public class ShopUI : MonoBehaviour
     void BuyCoins(int amount)
     {
         currency?.AddCoins(amount);
-        UIManager ui = MasterGameManager.Instance.UIManager;
+        UIManager ui = FindObjectOfType<UIManager>();
         ui?.ShowNotification($"+{amount} Coins!", Color.green);
     }
     
     void BuyGems(int amount)
     {
         currency?.AddGems(amount);
-        UIManager ui = MasterGameManager.Instance.UIManager;
+        UIManager ui = FindObjectOfType<UIManager>();
         ui?.ShowNotification($"+{amount} Gems!", Color.cyan);
     }
     

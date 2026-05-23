@@ -16,7 +16,7 @@ public class BuildingSystem : MonoBehaviour
             return false;
         }
         
-        CurrencyManager currency = MasterGameManager.Instance.Currency;
+        CurrencyManager currency = FindObjectOfType<CurrencyManager>();
         if (currency != null && currency.SpendCoins(cost))
         {
             currentLevel++;

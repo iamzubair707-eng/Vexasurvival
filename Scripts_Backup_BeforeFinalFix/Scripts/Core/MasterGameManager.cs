@@ -10,7 +10,7 @@ public class MasterGameManager : MonoBehaviour
         {
             if (_instance == null)
             {
-                _instance = MasterGameManager.Instance;
+                _instance = FindObjectOfType<MasterGameManager>();
                 if (_instance == null)
                 {
                     GameObject go = new GameObject("MasterGameManager");
@@ -70,26 +70,26 @@ public class MasterGameManager : MonoBehaviour
     {
         DebugLogger.Log("🚀 Caching all systems...");
         
-        Resources = MasterGameManager.Instance.Resources;
-        Currency = MasterGameManager.Instance.Currency;
-        BuildingSystem = MasterGameManager.Instance.BuildingSystem;
-        CombatSystem = MasterGameManager.Instance.CombatSystem;
-        PVERaid = MasterGameManager.Instance.PVERaid;
-        ChestSystem = MasterGameManager.Instance.ChestSystem;
-        QuestManager = MasterGameManager.Instance.QuestManager;
-        TutorialSystem = MasterGameManager.Instance.TutorialSystem;
-        UIManager = MasterGameManager.Instance.UIManager;
-        EnergySystem = MasterGameManager.Instance.EnergySystem;
-        Audio = MasterGameManager.Instance.Audio;
-        Visual = MasterGameManager.Instance.Visual;
-        Clan = MasterGameManager.Instance.Clan;
-        Leaderboard = MasterGameManager.Instance.Leaderboard;
-        Notification = MasterGameManager.Instance.Notification;
-        Vehicle = MasterGameManager.Instance.Vehicle;
-        Defense = MasterGameManager.Instance.Defense;
-        OfflineRewards = MasterGameManager.Instance.OfflineRewards;
-        Balancer = MasterGameManager.Instance.Balancer;
-        AntiCheat = MasterGameManager.Instance.AntiCheat;
+        Resources = FindObjectOfType<CoreResources>();
+        Currency = FindObjectOfType<CurrencyManager>();
+        BuildingSystem = FindObjectOfType<BuildingSystem>();
+        CombatSystem = FindObjectOfType<CombatSystem>();
+        PVERaid = FindObjectOfType<PVERaidSystem>();
+        ChestSystem = FindObjectOfType<ChestSystem>();
+        QuestManager = FindObjectOfType<QuestManager>();
+        TutorialSystem = FindObjectOfType<TutorialSystem>();
+        UIManager = FindObjectOfType<UIManager>();
+        EnergySystem = FindObjectOfType<EnergySystem>();
+        Audio = FindObjectOfType<AudioManager>();
+        Visual = FindObjectOfType<VisualManager>();
+        Clan = FindObjectOfType<ClanSystem>();
+        Leaderboard = FindObjectOfType<Leaderboard>();
+        Notification = FindObjectOfType<NotificationManager>();
+        Vehicle = FindObjectOfType<VehicleManager>();
+        Defense = FindObjectOfType<DefenseSystem>();
+        OfflineRewards = FindObjectOfType<OfflineRewards>();
+        Balancer = FindObjectOfType<GameBalancer>();
+        AntiCheat = FindObjectOfType<AntiCheat>();
         
         // Create missing systems if needed
         if (Resources == null) Resources = gameObject.AddComponent<CoreResources>();

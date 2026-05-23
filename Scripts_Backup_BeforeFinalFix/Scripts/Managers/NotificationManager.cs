@@ -72,7 +72,7 @@ public class NotificationManager : MonoBehaviour
     IEnumerator RedFlash()
     {
         // Find or create flash panel
-        GameObject flash = flashPanel;
+        GameObject flash = GameObject.Find("FlashPanel");
         if (flash != null)
         {
             UnityEngine.UI.Image img = flash.GetComponent<UnityEngine.UI.Image>();
