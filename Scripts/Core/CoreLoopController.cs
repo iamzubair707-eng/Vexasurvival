@@ -56,7 +56,7 @@ public class CoreLoopController : MonoBehaviour
             openChestButton.onClick.AddListener(OpenChest);
         
         UpdateUI();
-        InvokeRepeating("UpdateUI", 0f, 1f);
+        InvokeRepeating("UpdateUI", 1f, 1f);
     }
     
     void GatherResource(string type, int amount)
