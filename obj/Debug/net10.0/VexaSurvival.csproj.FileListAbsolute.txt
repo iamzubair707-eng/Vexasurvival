@@ -1,0 +1,5 @@
+/workspaces/Vexasurvival/obj/Debug/net10.0/VexaSurvival.GeneratedMSBuildEditorConfig.editorconfig
+/workspaces/Vexasurvival/obj/Debug/net10.0/VexaSurvival.AssemblyInfoInputs.cache
+/workspaces/Vexasurvival/obj/Debug/net10.0/VexaSurvival.AssemblyInfo.cs
+/workspaces/Vexasurvival/obj/Debug/net10.0/VexaSurvival.csproj.CoreCompileInputs.cache
+/workspaces/Vexasurvival/obj/Debug/net10.0/VexaSurvival.sourcelink.json

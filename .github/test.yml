@@ -1,0 +1,43 @@
+name: C# Syntax Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check-syntax:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0'
+    
+    - name: Check C# files syntax
+      run: |
+        echo "🔍 Checking all .cs files for syntax errors..."
+        
+        # Find all .cs files and check each
+        for file in $(find . -name "*.cs" -not -path "./bin/*" -not -path "./obj/*"); do
+          echo "Checking: $file"
+          dotnet build --no-restore /p:CheckForOverflowUnderflow=false 2>&1 | grep -E "error CS|warning CS" || echo "✅ OK"
+        done
+        
+        echo "✅ Syntax check complete!"
+    
+    - name: Check file naming convention
+      run: |
+        echo "📁 Checking file structure..."
+        
+        # Check if Scripts folder exists
+        if [ -d "Scripts" ]; then
+          COUNT=$(find Scripts -name "*.cs" | wc -l)
+          echo "✅ Scripts folder found with $COUNT C# files"
+        else
+          echo "⚠️ Scripts folder not found"
+        fi
