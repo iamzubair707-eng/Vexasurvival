@@ -4,32 +4,30 @@ public class CachedReferences : MonoBehaviour
 {
     public static CachedReferences Instance { get; private set; }
     
+    public MasterGameManager GameManager;
+    public CoreResources Resources;
+    public CurrencyManager Currency;
+    public UIManager UI;
+    public BuildingSystem Building;
+    public CombatSystem Combat;
+    public VehicleSystem Vehicle;
+    
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            
+            // Assign all references via Inspector or find once
+            GameManager = MasterGameManager.Instance;
+            Resources = FindObjectOfType<CoreResources>();
+            Currency = FindObjectOfType<CurrencyManager>();
+            UI = FindObjectOfType<UIManager>();
         }
         else
         {
             Destroy(gameObject);
         }
     }
-    
-    // All systems accessed through MasterGameManager singleton
-    public static MasterGameManager GameManager => MasterGameManager.Instance;
-    public static CoreResources Resources => GameManager?.Resources;
-    public static CurrencyManager Currency => GameManager?.Currency;
-    public static UIManager UI => GameManager?.UIManager;
-    public static BuildingSystem Building => GameManager?.BuildingSystem;
-    public static CombatSystem Combat => GameManager?.CombatSystem;
-    public static PVERaidSystem PVERaid => GameManager?.PVERaid;
-    public static ChestSystem Chest => GameManager?.ChestSystem;
-    public static QuestManager Quests => GameManager?.QuestManager;
-    public static TutorialSystem Tutorial => GameManager?.TutorialSystem;
-    public static EnergySystem Energy => GameManager?.EnergySystem;
-    public static AudioManager Audio => GameManager?.Audio;
-    public static VisualManager Visual => GameManager?.Visual;
-    public static VehicleSystem Vehicle => GameManager?.Vehicle;
 }

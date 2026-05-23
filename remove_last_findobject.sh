@@ -1,3 +1,11 @@
+#!/bin/bash
+
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "🔧 REMOVING LAST 4 FINDOBJECTOFTYPE CALLS"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# Fix MasterGameManager.cs - remove FindObjectOfType from Instance getter
+cat > Scripts/Core/MasterGameManager.cs << 'EOF'
 using UnityEngine;
 using System.Collections;
 
