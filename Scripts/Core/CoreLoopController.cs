@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class CoreLoopController : MonoBehaviour
 {
-    [Header("UI References")]
+    [Header("UI References - Assign in Inspector")]
     public Button gatherWoodButton;
     public Button gatherStoneButton;
     public Button upgradeBuildingButton;
@@ -17,22 +17,24 @@ public class CoreLoopController : MonoBehaviour
     public Text troopsText;
     public Text raidStatusText;
     
+    // Direct references - no searching!
+    private BuildingManager buildingManager;
     private CoreResources resources;
     private CurrencyManager currency;
-    private BuildingManager buildings;
     private PVERaidSystem pveRaid;
     private ChestSystem chests;
     
-    int troopCount = 0;
-    int buildingLevel = 1;
+    private int troopCount = 0;
+    private int buildingLevel = 1;
     
     void Start()
     {
+        // Use Singleton pattern - no FindObjectOfType!
+        buildingManager = BuildingManager.Instance;
         resources = MasterGameManager.Instance.Resources;
         currency = MasterGameManager.Instance.Currency;
-        buildings = FindObjectOfType<BuildingManager>();
-        pveRaid = MasterGameManager.Instance.PVERaid;
-        chests = MasterGameManager.Instance.ChestSystem;
+        pveRaid = PVERaidSystem.Instance;
+        chests = ChestSystem.Instance;
         
         // Setup button listeners
         if (gatherWoodButton != null)
@@ -62,12 +64,6 @@ public class CoreLoopController : MonoBehaviour
         if (resources != null)
         {
             resources.AddResource(type, amount);
-            DebugLogger.Log($"📦 Gathered {amount} {type}!");
-            
-            // Visual feedback
-            if (AudioManager.Instance != null)
-                AudioManager.Instance.CoinCollect();
-            
             UpdateUI();
         }
     }
@@ -79,16 +75,7 @@ public class CoreLoopController : MonoBehaviour
         if (currency != null && currency.SpendCoins(cost))
         {
             buildingLevel++;
-            DebugLogger.Log($"🏗️ Building upgraded to level {buildingLevel}!");
-            
-            if (AudioManager.Instance != null)
-                AudioManager.Instance.BuildComplete();
-            
             UpdateUI();
-        }
-        else
-        {
-            DebugLogger.Log("❌ Not enough coins to upgrade!");
         }
     }
     
@@ -99,34 +86,18 @@ public class CoreLoopController : MonoBehaviour
         if (currency != null && currency.SpendCoins(cost))
         {
             troopCount++;
-            DebugLogger.Log($"⚔️ Troop trained! Total troops: {troopCount}");
-            
-            if (AudioManager.Instance != null)
-                AudioManager.Instance.ButtonClick();
-            
             UpdateUI();
-        }
-        else
-        {
-            DebugLogger.Log("❌ Not enough coins to train troop!");
         }
     }
     
     void StartRaid()
     {
-        if (troopCount <= 0)
-        {
-            DebugLogger.Log("❌ No troops to send on raid! Train some first!");
-            return;
-        }
+        if (troopCount <= 0) return;
         
         if (pveRaid != null)
         {
             pveRaid.StartRaid(PVERaidSystem.RaidType.ZombieHorde);
-            DebugLogger.Log($"⚔️ Raid started with {troopCount} troops!");
-            
-            if (AudioManager.Instance != null)
-                AudioManager.Instance.RaidStart();
+            UpdateUI();
         }
     }
     
@@ -134,39 +105,23 @@ public class CoreLoopController : MonoBehaviour
     {
         if (chests != null)
         {
-            var reward = chests.OpenChest();
-            if (reward != null)
-            {
-                DebugLogger.Log($"🎁 Chest opened! Got: {reward.rewardType} x{reward.amount}");
-                
-                if (AudioManager.Instance != null)
-                    AudioManager.Instance.CoinCollect();
-                
-                UpdateUI();
-            }
+            chests.OpenChest();
+            UpdateUI();
         }
     }
     
     void UpdateUI()
     {
         if (resourcesText != null && resources != null)
-        {
             resourcesText.text = $"Wood:{resources.scrap} Stone:{resources.fuel}";
-        }
         
         if (buildingsText != null)
-        {
             buildingsText.text = $"Building Level: {buildingLevel}";
-        }
         
         if (troopsText != null)
-        {
             troopsText.text = $"Troops: {troopCount}";
-        }
         
         if (raidStatusText != null && pveRaid != null)
-        {
             raidStatusText.text = $"Raid Energy: {pveRaid.raidEnergy}/{pveRaid.maxRaidEnergy}";
-        }
     }
 }

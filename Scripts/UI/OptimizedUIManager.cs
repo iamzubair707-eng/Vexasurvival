@@ -1,23 +1,28 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class OptimizedUIManager : MonoBehaviour
 {
     public static OptimizedUIManager Instance;
     
-    [Header("Cached UI References")]
-    private Text woodText;
-    private Text stoneText;
-    private Text coinText;
-    private Text gemText;
-    private Text troopText;
-    private Text levelText;
+    [Header("UI References - Assign in Inspector")]
+    [SerializeField] private Text woodText;
+    [SerializeField] private Text stoneText;
+    [SerializeField] private Text coinText;
+    [SerializeField] private Text gemText;
+    [SerializeField] private Text troopText;
+    [SerializeField] private Text levelText;
+    [SerializeField] private Text xpText;
     
-    [Header("UI Panels")]
-    public GameObject resourcePanel;
-    public GameObject actionPanel;
-    public GameObject notificationPanel;
+    [Header("UI Panels - Assign in Inspector")]
+    [SerializeField] private GameObject resourcePanel;
+    [SerializeField] private GameObject actionPanel;
+    [SerializeField] private GameObject notificationPanel;
+    
+    [Header("Canvas - Assign in Inspector")]
+    [SerializeField] private Canvas canvas; // No GameObject.Find!
     
     private MasterGameManager gameManager;
     private Queue<string> notificationQueue = new Queue<string>();
@@ -29,40 +34,17 @@ public class OptimizedUIManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            CacheUIReferences();
         }
         else
         {
             Destroy(gameObject);
         }
-    }
-    
-    void CacheUIReferences()
-    {
-        // Cache all UI text components at startup
-        GameObject canvas = GameObject.GameObject.FindGameObjectWithTag("Canvas");
-        if (canvas != null)
-        {
-            woodText = FindTextInChildren(canvas.transform, "WoodText");
-            stoneText = FindTextInChildren(canvas.transform, "StoneText");
-            coinText = FindTextInChildren(canvas.transform, "CoinText");
-            gemText = FindTextInChildren(canvas.transform, "GemText");
-            troopText = FindTextInChildren(canvas.transform, "TroopText");
-            levelText = FindTextInChildren(canvas.transform, "LevelText");
-        }
-    }
-    
-    Text FindTextInChildren(Transform parent, string name)
-    {
-        Transform child = parent.Find(name);
-        if (child != null)
-            return child.GetComponent<Text>();
-        return null;
+        
+        gameManager = MasterGameManager.Instance;
     }
     
     void Start()
     {
-        gameManager = MasterGameManager.Instance;
         StartCoroutine(ProcessNotificationQueue());
     }
     
@@ -81,7 +63,8 @@ public class OptimizedUIManager : MonoBehaviour
     
     public void UpdateLevel(int level, int currentXP, int neededXP)
     {
-        if (levelText != null) levelText.text = $"🌟 Level {level} ({currentXP}/{neededXP} XP)";
+        if (levelText != null) levelText.text = $"🌟 Level {level}";
+        if (xpText != null) xpText.text = $"XP: {currentXP}/{neededXP}";
     }
     
     public void ShowNotification(string message, Color color, float duration = 2f)
@@ -98,9 +81,10 @@ public class OptimizedUIManager : MonoBehaviour
                 string message = notificationQueue.Dequeue();
                 isShowingNotification = true;
                 
-                // Create floating notification
+                // Create notification using canvas reference
                 GameObject notifGO = new GameObject("Notification");
-                notifGO.transform.SetParent(notificationPanel?.transform ?? null);
+                if (canvas != null)
+                    notifGO.transform.SetParent(canvas.transform);
                 
                 Text text = notifGO.AddComponent<Text>();
                 text.text = message;
@@ -113,7 +97,6 @@ public class OptimizedUIManager : MonoBehaviour
                 rect.anchoredPosition = new Vector2(0, 100);
                 rect.sizeDelta = new Vector2(400, 60);
                 
-                // Fade out and destroy
                 yield return new WaitForSeconds(duration);
                 Destroy(notifGO);
                 isShowingNotification = false;
@@ -127,6 +110,12 @@ public class OptimizedUIManager : MonoBehaviour
     {
         if (panel != null)
             StartCoroutine(FadeInPanel(panel));
+    }
+    
+    public void HidePanel(GameObject panel)
+    {
+        if (panel != null)
+            StartCoroutine(FadeOutPanel(panel));
     }
     
     IEnumerator FadeInPanel(GameObject panel)
@@ -148,12 +137,6 @@ public class OptimizedUIManager : MonoBehaviour
         }
         
         group.alpha = 1;
-    }
-    
-    public void HidePanel(GameObject panel)
-    {
-        if (panel != null)
-            StartCoroutine(FadeOutPanel(panel));
     }
     
     IEnumerator FadeOutPanel(GameObject panel)

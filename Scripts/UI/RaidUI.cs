@@ -9,15 +9,17 @@ public class RaidUI : MonoBehaviour
     public Text raidStatusText;
     public Text energyText;
     
-    private PVERaidSystem pveRaid;
+    // Direct references - no FindObjectOfType needed
     private RaidSystem pvpRaid;
+    private PVERaidSystem pveRaid;
     private EnergySystem energy;
     
     void Start()
     {
-        pveRaid = MasterGameManager.Instance.PVERaid;
-        pvpRaid = FindObjectOfType<RaidSystem>();
-        energy = MasterGameManager.Instance.EnergySystem;
+        // Use Singleton pattern - no searching!
+        pvpRaid = RaidSystem.Instance;
+        pveRaid = PVERaidSystem.Instance;
+        energy = EnergySystem.Instance;
         
         if (pveRaidButton != null)
             pveRaidButton.onClick.AddListener(StartPVERaid);

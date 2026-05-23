@@ -1,19 +1,21 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using System.Collections.Generic;
 
 public class FastUIManager : MonoBehaviour
 {
     public static FastUIManager Instance;
     
-    // Cached UI elements - no FindObjectOfType, no GetComponent in Update
-    private Text cachedWoodText;
-    private Text cachedStoneText;
-    private Text cachedCoinText;
-    private Text cachedGemText;
-    private Text cachedTroopText;
-    private Text cachedLevelText;
+    [Header("UI References - Assign in Inspector")]
+    [SerializeField] private Text woodText;
+    [SerializeField] private Text stoneText;
+    [SerializeField] private Text coinText;
+    [SerializeField] private Text gemText;
+    [SerializeField] private Text troopText;
+    [SerializeField] private Text levelText;
+    
+    [Header("Canvas - Assign in Inspector")]
+    [SerializeField] private Canvas canvas; // No GameObject.Find!
     
     void Awake()
     {
@@ -21,7 +23,6 @@ public class FastUIManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            CacheUIElements();
         }
         else
         {
@@ -29,42 +30,22 @@ public class FastUIManager : MonoBehaviour
         }
     }
     
-    void CacheUIElements()
-    {
-        // Find and cache once - never again
-        GameObject canvas = GameObject.GameObject.FindGameObjectWithTag("Canvas");
-        if (canvas == null) return;
-        
-        cachedWoodText = FindText(canvas.transform, "WoodText");
-        cachedStoneText = FindText(canvas.transform, "StoneText");
-        cachedCoinText = FindText(canvas.transform, "CoinText");
-        cachedGemText = FindText(canvas.transform, "GemText");
-        cachedTroopText = FindText(canvas.transform, "TroopText");
-        cachedLevelText = FindText(canvas.transform, "LevelText");
-    }
-    
-    Text FindText(Transform parent, string name)
-    {
-        Transform child = parent.Find(name);
-        return child != null ? child.GetComponent<Text>() : null;
-    }
-    
     public void UpdateResources(int wood, int stone, int coins, int gems)
     {
-        if (cachedWoodText != null) cachedWoodText.text = $"🪵 {wood}";
-        if (cachedStoneText != null) cachedStoneText.text = $"🪨 {stone}";
-        if (cachedCoinText != null) cachedCoinText.text = $"💰 {coins}";
-        if (cachedGemText != null) cachedGemText.text = $"💎 {gems}";
+        if (woodText != null) woodText.text = $"🪵 {wood}";
+        if (stoneText != null) stoneText.text = $"🪨 {stone}";
+        if (coinText != null) coinText.text = $"💰 {coins}";
+        if (gemText != null) gemText.text = $"💎 {gems}";
     }
     
     public void UpdateTroops(int count)
     {
-        if (cachedTroopText != null) cachedTroopText.text = $"⚔️ Troops: {count}";
+        if (troopText != null) troopText.text = $"⚔️ Troops: {count}";
     }
     
     public void UpdateLevel(int level, int currentXP, int neededXP)
     {
-        if (cachedLevelText != null) cachedLevelText.text = $"🌟 Level {level} ({currentXP}/{neededXP} XP)";
+        if (levelText != null) levelText.text = $"🌟 Level {level}";
     }
     
     public void ShowMessage(string msg, Color color, float duration = 2f)
@@ -75,6 +56,9 @@ public class FastUIManager : MonoBehaviour
     IEnumerator ShowMessageCoroutine(string msg, Color color, float duration)
     {
         GameObject go = new GameObject("Message");
+        if (canvas != null)
+            go.transform.SetParent(canvas.transform);
+        
         Text text = go.AddComponent<Text>();
         text.text = msg;
         text.color = color;
