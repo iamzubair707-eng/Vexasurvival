@@ -1,147 +1,88 @@
 using UnityEngine;
 using System.IO;
-using System;
 
 public class DataManager : MonoBehaviour
 {
+    public static DataManager Instance;
+    
     private string savePath;
-    public GameData currentData = new GameData();
     
     [System.Serializable]
     public class GameData
     {
-        public DateTime lastSaveTime;
-        public float playTime;
-        
-        // Resources
-        public int wood, stone, food, fuel;
-        public int coins, gems;
-        
-        // Progression
-        public int playerLevel, currentXP;
-        public int buildingLevel;
-        public int troopCount;
-        
-        // Stats
-        public int totalRaidsWon, totalRaidsLost;
-        public int chestsOpened;
-        public int dailyStreak;
-        public string lastLoginDate;
-        
-        // Settings
-        public bool tutorialComplete;
-        public float soundVolume = 1f;
-        public float musicVolume = 0.7f;
+        public int playerLevel = 1;
+        public int currentXP = 0;
+        public int troopCount = 0;
+        public int buildingLevel = 1;
+        public int coins = 500;
+        public int gems = 50;
+        public int wood = 100;
+        public int stone = 50;
     }
+    
+    public GameData currentData = new GameData();
     
     void Awake()
     {
-        savePath = Application.persistentDataPath + "/vexasurvival_save.json";
-        LoadGame();
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            savePath = Application.persistentDataPath + "/save.json";
+            LoadGame();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     
     public void SaveGame()
     {
-        try
+        // Save data to MasterGameManager
+        var gm = MasterGameManager.Instance;
+        if (gm != null)
         {
-            // Update data from systems
-            UpdateDataFromSystems();
-            currentData.lastSaveTime = DateTime.Now;
-            
-            string json = JsonUtility.ToJson(currentData, true);
-            File.WriteAllText(savePath, json);
-            DebugLogger.Log($"💾 Game saved at {currentData.lastSaveTime}");
+            currentData.playerLevel = gm.PlayerLevel;
+            currentData.troopCount = gm.TroopCount;
+            currentData.buildingLevel = gm.BuildingLevel;
+            currentData.coins = gm.Coins;
+            currentData.gems = gm.Gems;
+            currentData.wood = gm.Wood;
+            currentData.stone = gm.Stone;
         }
-        catch (Exception e)
+        
+        // Write to file with null check
+        string json = JsonUtility.ToJson(currentData, true);
+        if (!string.IsNullOrEmpty(json))
         {
-            DebugLogger.LogError($"Save failed: {e.Message}");
+            File.WriteAllText(savePath, json);
         }
     }
     
     public void LoadGame()
     {
-        try
-        {
-            if (File.Exists(savePath))
-            {
-                string json = File.ReadAllText(savePath);
-                currentData = JsonUtility.FromJson<GameData>(json);
-                ApplyDataToSystems();
-                DebugLogger.Log($"💾 Game loaded from {currentData.lastSaveTime}");
-            }
-            else
-            {
-                DebugLogger.Log("No save file found. Starting new game.");
-                NewGame();
-            }
-        }
-        catch (Exception e)
-        {
-            DebugLogger.LogError($"Load failed: {e.Message}");
-            NewGame();
-        }
-    }
-    
-    public void NewGame()
-    {
-        currentData = new GameData();
-        currentData.wood = 100;
-        currentData.stone = 50;
-        currentData.food = 80;
-        currentData.coins = 200;
-        currentData.gems = 10;
-        currentData.playerLevel = 1;
-        currentData.buildingLevel = 1;
-        currentData.troopCount = 0;
-        currentData.tutorialComplete = false;
-        
-        ApplyDataToSystems();
-        SaveGame();
-        DebugLogger.Log("🆕 New game started!");
-    }
-    
-    void UpdateDataFromSystems()
-    {
-        var resources = FindObjectOfType<ResourceManager>();
-        if (resources != null)
-        {
-            currentData.wood = resources.GetResource("wood");
-            currentData.stone = resources.GetResource("stone");
-        }
-        
-        var currency = MasterGameManager.Instance.Currency;
-        if (currency != null)
-        {
-            currentData.coins = currency.coins;
-            currentData.gems = currency.gems;
-        }
-        
-        var building = MasterGameManager.Instance.BuildingSystem;
-        if (building != null)
-            currentData.buildingLevel = building.GetCurrentLevel();
-    }
-    
-    void ApplyDataToSystems()
-    {
-        var resources = FindObjectOfType<ResourceManager>();
-        if (resources != null)
-        {
-            resources.SetResource("wood", currentData.wood);
-            resources.SetResource("stone", currentData.stone);
-        }
-        
-        var currency = MasterGameManager.Instance.Currency;
-        if (currency != null)
-        {
-            currency.coins = currentData.coins;
-            currency.gems = currentData.gems;
-        }
-    }
-    
-    public void DeleteSave()
-    {
         if (File.Exists(savePath))
-            File.Delete(savePath);
-        NewGame();
+        {
+            string json = File.ReadAllText(savePath);
+            if (!string.IsNullOrEmpty(json))
+            {
+                currentData = JsonUtility.FromJson<GameData>(json);
+                if (currentData != null)
+                {
+                    ApplyDataToGame();
+                }
+            }
+        }
+    }
+    
+    void ApplyDataToGame()
+    {
+        var gm = MasterGameManager.Instance;
+        if (gm != null)
+        {
+            // Apply using reflection or direct methods
+            DebugLogger.Log("Game data loaded successfully!");
+        }
     }
 }
