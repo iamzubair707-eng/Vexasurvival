@@ -1,0 +1,38 @@
+name: Build Vexa Survival APK 🚀
+
+on:
+  workflow_dispatch: # Isse aap jab chahein Chrome se ek click par build start kar sakte hain
+
+jobs:
+  buildForAndroid:
+    name: Build for Android 🤖
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Code Checkout
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      # 2. Cache Unity Library (Taaki agli builds fast hon)
+      - name: Cache Library Folder
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-Android
+
+      # 3. Run Unity Build via Cloud Action
+      - name: Build Game Project
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          targetPlatform: Android
+          unityVersion: 2022.3.48f1
+
+      # 4. Upload APK as Artifact
+      - name: Upload APK File
+        uses: actions/upload-artifact@v4
+        with:
+          name: Vexa-Survival-Android-Build
+          path: build/Android
